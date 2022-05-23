@@ -1,0 +1,50 @@
+@startuml
+
+!theme mars
+
+Visiteur -> RegisterController : GET /register
+alt IsLogin
+    RegisterController -> Twig : redirect('home')
+    Twig --> Visiteur : affichage page d'accueil
+else IsNotLogin
+    RegisterController -> Twig : render('/register')
+    Twig --> Visiteur : affichage formulaire d'inscription
+end
+
+Visiteur -> RegisterController : POST /register
+
+alt IsLogin
+    RegisterController -> Twig : redirect('home')
+        Twig --> Visiteur : affichage page d'accueil
+else IsNotLogin
+    RegisterController -> Validator : validation des données
+    Validator --> RegisterController : return
+    alt IsNotValid
+        RegisterController -> Twig : redirectToLastPage(['error' => $error])
+        Twig --> Visiteur : affichage formulaire d'inscription avec message d'erreur
+    else IsValid
+        RegisterController -> Database : vérifier que l'adresse mail n'est pas utilisée
+        Database --> RegisterController : return
+
+        alt MailIsUsed
+            RegisterController -> Twig : redirectToLastPage(['error' => $error])
+            Twig --> Visiteur : affichage formulaire d'inscription avec message d'erreur
+        else MailIsNotUsed
+            RegisterController -> Database : enregistrer le nouveau compte
+            Database --> RegisterController : return
+            alt AccountIsNotCreated
+                RegisterController -> Twig : redirectToLastPage(['error' => $error])
+                Twig --> Visiteur : affichage formulaire d'inscription avec message d'erreur
+            else AccountIsCreated
+                RegisterController -> Twig : render('/login', ['success' => $success])
+                Twig --> Visiteur : affichage du formulaire de connexion avec message de succès
+            end
+        end
+    end
+end
+
+
+
+
+
+@enduml

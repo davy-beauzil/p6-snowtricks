@@ -1,0 +1,22 @@
+@startuml
+
+!theme plain
+left to right direction
+
+:Visiteur:
+
+package compte {
+    Visiteur --> (Se connecter)
+    Visiteur --> (S'inscrire)
+    Visiteur --> (Réinitialisation mot de passe)
+}
+
+package figures {
+    (Consulter les figures) <--- Visiteur
+    (Consulter une figure) <--- Visiteur
+}
+
+package commentaires {
+    (Consulter les commentaires) <--- Visiteur
+}
+@enduml

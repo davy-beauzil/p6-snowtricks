@@ -1,0 +1,28 @@
+@startuml
+
+!theme plain
+left to right direction
+
+:Utilisateur:
+
+package figures {
+    Utilisateur ---> (Consulter les figures)
+    Utilisateur ---> (Consulter une figure)
+    Utilisateur ---> (Créer une figure)
+    Utilisateur ---> (Modifier une de ses figures)
+    Utilisateur ---> (Supprimer une de ses figures)
+}
+
+package commentaires {
+    (Consulter les commentaires) <--- Utilisateur
+    (Commenter une  figure) <--- Utilisateur
+    (Modifier un de ses commentaires) <--- Utilisateur
+    (Supprimer un de ses commentaires) <--- Utilisateur
+}
+
+package compte {
+     Utilisateur ---> (Se déconnecter)
+}
+
+
+@enduml

@@ -1,0 +1,16 @@
+@startuml
+
+!theme mars
+
+header Cette fonctionnalité a été ajoutée pour améliorer la modération sur le site
+title Supprimer un utilisateur
+
+Person as "Admin" -> UserController : DELETE /users/{username}
+alt Is not admin
+    UserController -[#red]> Twig : render('401')
+    Twig -[#red]-> Person : Affichage de la page 401 : Unauthorized
+else Is admin
+    UserController -> Database : suppression de l'utilisateur
+    Database --> UserController : return
+end
+@enduml

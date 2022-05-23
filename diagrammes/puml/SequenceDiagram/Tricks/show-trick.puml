@@ -1,0 +1,10 @@
+@startuml
+
+!theme mars
+
+Person as "Tout utilisateur" -> TrickController : GET /tricks/{slug}
+TrickController -> Database : récupération de la figure
+Database -> TrickController : return
+TrickController --> Person : affichage de la figure
+
+@enduml

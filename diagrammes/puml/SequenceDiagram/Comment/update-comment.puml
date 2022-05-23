@@ -1,0 +1,30 @@
+@startuml
+
+!theme mars
+
+Person as "Utilisateur connecté" -> CommentController : PUT /comment/{id}
+
+CommentController -> Database : récupération des infos du commentaire
+Database --> CommentController : return
+alt is not author
+CommentController -[#red]> Twig : render('401')
+Twig -[#red]-> Person : Affichage de la page 401 : Unauthorized
+else is author
+CommentController -> Validator : validation du commentaire
+Database --> CommentController : return
+    alt is not valid
+    CommentController -[#red]> Twig : render('trick', ['error' => $error])
+    Twig -[#red]-> Person : Affichage de la figure avec un message d'erreur
+    else
+    CommentController -> Database : modification du commentaire
+    Database --> CommentController : return
+        alt is not updated
+        CommentController -[#red]> Twig : render('trick', ['error' => $error])
+        Twig -[#red]-> Person : affichage de la figure avec un message d'erreur
+        else is updated
+        CommentController -[#green]> Twig : render('trick', ['success' => $success])
+        Twig -[#green]-> Person : affichage de la figure avec un message de succès
+        end
+    end
+end
+@enduml

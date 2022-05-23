@@ -1,0 +1,10 @@
+input{
+    @apply rounded-lg border border-slate-100;
+    margin-bottom: 8px!important;
+    padding: 8px 16px!important;
+    background-color: #fff;
+}
+
+input[type=submit]{
+    @apply bg-sky-700 text-sky-50 hover:bg-sky-50 hover:text-sky-700 hover:border hover:border-sky-700 duration-300 cursor-pointer;
+}

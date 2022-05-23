@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Snowtricks | Inscription{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                <h1 class="text-center display-3">Inscription</h1>
+                <p class="text-center">Rejoignez l'aventure Snowtricks</p>
+                <div>
+                    {{ form_start(form) }}
+                    {{ form_row(form.username) }}
+                    {{ form_row(form.email) }}
+                    {{ form_row(form.password.first) }}
+                    {{ form_row(form.password.second) }}
+                    <input type="submit" class="btn btn-primary" value="S'inscrire">
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,16 @@
+@startuml
+
+!theme mars
+
+header Cette fonctionnalité a été ajoutée pour améliorer la modération sur le site
+title Débloquer une figure
+
+Person as "Admin" -> TrickController : GET /tricks/{slug}/unblock
+alt Is not admin
+    TrickController -[#red]> Twig : render('401')
+    Twig -[#red]-> Person : Affichage de la page 401 : Unauthorized
+else Is admin
+    TrickController -> Database : déblocage de la figure
+    Database --> TrickController : return
+end
+@enduml

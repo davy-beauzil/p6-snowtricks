@@ -1,0 +1,40 @@
+@startuml
+
+!theme mars
+
+Person as "Utilisateur connecté" -> TrickController : GET /tricks/new
+alt Is not logged in or Is not active
+    TrickController -[#red]> Twig : render('401')
+    Twig -[#red]-> Person : Affichage de la page 401 : Unauthorized
+else Is logged in and Is Active
+    TrickController -> Twig : render('tricks/create')
+    Twig --> Person : affichage du formulaire de création
+end
+
+
+Person -> TrickController : POST /tricks/new
+alt Is not logged in or Is not Active
+TrickController -[#red]> Twig : render('401')
+Twig -[#red]-> Person : Affichage de la page 401 : Unauthorized
+else Is logged in and Is Active
+    TrickController -> Validator : validation des données
+    Validator --> TrickController : return
+
+    alt Is not valid
+        TrickController -[#red]> Twig : render('tricks/create')
+        Twig -[#red]-> Person : Affichage du formulaire avec un message d'erreur
+    else Is valid
+        TrickController -> Database : enregistrement de la figure
+        Database --> TrickController : return
+
+        alt Is not saved
+            TrickController -[#red]> Twig : render('tricks/create')
+            Twig -[#red]-> Person : Affichage du formulaire avec un message d'erreur
+        else Is saved
+            TrickController -[#green]> Twig : redirectToRoute('trick', ['slug' => $slug] )
+            Twig -[#green]-> Person : Affichage de la figure avec un message de succès
+        end
+    end
+end
+
+@enduml
