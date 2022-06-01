@@ -17,6 +17,7 @@
                         <input  class="form-control mb-3" type="password" id="password" name="_password" placeholder="Mot de passe"/>
                         <input type="hidden" name="_target_path" value="/register"/>
                         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                        <a class="fs-6 mb-3 mx-auto" href="{{ path('forgot_password') }}">Mot de passe oublié ?</a>
                         <input  class="btn btn-primary" type="submit" value="Connexion"/>
                     </form>
                 </div>

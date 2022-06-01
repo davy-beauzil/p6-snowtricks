@@ -32,6 +32,12 @@ class RegisterHandler {
         if($form->isSubmitted() && $form->isValid()){
             /** @var User $user */
             $user = $form->getData();
+
+            if(!$user->checkStrengthPassword()){
+                $form->addError(new FormError('Votre mot de passe doit faire au moins 8 caractères et comporter un chiffre et un caractère spécial (@ - _ / ou !).'));
+                return null;
+            }
+
             try{
                 $em = $this->doctrine->getManager();
                 $user->setId(bin2hex(random_bytes(64)));

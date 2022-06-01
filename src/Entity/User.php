@@ -5,11 +5,16 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Messenger\MessageBus;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
+#[ORM\HasLifecycleCallbacks()]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -56,7 +61,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'datetime_immutable')]
     private DateTimeImmutable $updatedAt;
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }
@@ -264,5 +269,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+
+    public function checkStrengthPassword(): bool
+    {
+        $pw = $this->getPassword();
+        $size = strlen($pw);
+        $containsSpecialCharacter = false;
+        $containsNumber = false;
+
+        foreach (['@', '-', '_', '/', '!'] as $specialCharacter){
+            if(str_contains($pw, $specialCharacter)) $containsSpecialCharacter = true;
+        }
+        foreach (['0', '1', '2', '3,', '4', '5', '6', '7', '8', '9'] as $number){
+            if(str_contains($pw, $number)) $containsNumber = true;
+        }
+
+        return $size > 8 && $containsSpecialCharacter && $containsNumber;
     }
 }
