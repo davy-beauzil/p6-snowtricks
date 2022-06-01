@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form\ForgotPassword;
 
 use App\Entity\User;
@@ -14,8 +16,8 @@ class ForgotPasswordHandler
     public function __construct(
         private FormFactoryInterface $formFactory,
         private UserRepository $userRepository,
-    )
-    {}
+    ) {
+    }
 
     public function prepare(User $user, array $options = []): FormInterface
     {
@@ -26,15 +28,17 @@ class ForgotPasswordHandler
     {
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             /** @var User $user */
             $user = $form->getData();
             $user = $this->userRepository->findOneByUsername($user->getUserIdentifier());
-            if(!$user instanceof User){
+            if (! $user instanceof User) {
                 throw new BadCredentialsException();
             }
+
             return $user;
         }
+
         return null;
     }
 }

@@ -1,14 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\User;
+use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\Exception\ORMException;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\OptimisticLockException;
 use Doctrine\Persistence\ManagerRegistry;
-use Exception;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
@@ -28,10 +27,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         parent::__construct($registry, User::class);
     }
 
-    /**
-     * @throws ORMException
-     * @throws OptimisticLockException
-     */
     public function add(User $entity, bool $flush = false): void
     {
         $this->_em->persist($entity);
@@ -40,10 +35,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         }
     }
 
-    /**
-     * @throws ORMException
-     * @throws OptimisticLockException
-     */
     public function remove(User $entity, bool $flush = false): void
     {
         $this->_em->remove($entity);
@@ -57,8 +48,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      */
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
-        if (!$user instanceof User) {
-            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', \get_class($user)));
+        if (! $user instanceof User) {
+            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $user::class));
         }
 
         $user->setPassword($newHashedPassword);
@@ -66,36 +57,34 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->flush();
     }
 
-    /**
-     * @throws NonUniqueResultException
-     */
     public function findOneById(string $id): ?User
     {
-        return $this->createQueryBuilder('u')
+        $user = $this->createQueryBuilder('u')
             ->andWhere('u.id = :id')
             ->setParameter('id', $id)
             ->getQuery()
             ->getOneOrNullResult()
         ;
+
+        return $user instanceof User ? $user : null;
     }
 
-    /**
-     * @throws Exception
-     */
-    public function confirm(User $user)
+    public function confirm(User $user): void
     {
-        $user->setConfirmedAt(new \DateTimeImmutable());
+        $user->setConfirmedAt(new DateTimeImmutable());
         $this->_em->persist($user);
         $this->_em->flush();
     }
 
     public function findOneByUsername(string $username): ?User
     {
-        return $this->createQueryBuilder('u')
+        $user = $this->createQueryBuilder('u')
             ->andWhere('u.username = :username')
             ->setParameter('username', $username)
             ->getQuery()
             ->getOneOrNullResult()
-            ;
+        ;
+
+        return $user instanceof User ? $user : null;
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Emails;
 
 use App\Entity\User;
@@ -10,10 +12,10 @@ use Symfony\Component\Mime\Address;
 
 class EmailService
 {
-
     public function __construct(
         private MessageBusInterface $bus,
-    ){}
+    ) {
+    }
 
     public function sendAccountConfirmationEmail(User $user): void
     {
@@ -25,7 +27,7 @@ class EmailService
             ->context([
                 'user' => $user,
                 'confirmation_token' => $user->getConfirmationToken(),
-                'app_url' => $_ENV['APP_URL']
+                'app_url' => $_ENV['APP_URL'],
             ])
         ;
         $this->bus->dispatch(new Email($templatedEmail));
@@ -41,10 +43,9 @@ class EmailService
             ->context([
                 'user' => $user,
                 'forgot_password_token' => $user->getForgotPasswordToken(),
-                'app_url' => $_ENV['APP_URL']
+                'app_url' => $_ENV['APP_URL'],
             ])
         ;
         $this->bus->dispatch(new Email($templatedEmail));
     }
-
 }

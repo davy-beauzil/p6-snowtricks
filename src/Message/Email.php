@@ -1,16 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Message;
 
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
 class Email
 {
-    private TemplatedEmail $templatedEmail;
-
-    public function __construct(TemplatedEmail $templatedEmail)
+    public function __construct(private TemplatedEmail $templatedEmail)
     {
-        $this->templatedEmail = $templatedEmail;
     }
 
     public function getTemplatedEmail(): TemplatedEmail

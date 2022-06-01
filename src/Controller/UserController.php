@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\ForgotPassword\ForgotPasswordHandler;
 use App\Form\Register\RegisterHandler;
+use App\Form\ResetPassword\ResetPasswordData;
 use App\Form\ResetPassword\ResetPasswordHandler;
 use App\Repository\UserRepository;
 use App\Services\Emails\EmailService;
@@ -21,14 +24,14 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class UserController extends AbstractController
 {
     public function __construct(
-        private RegisterHandler  $registerHandler,
+        private RegisterHandler $registerHandler,
         private ForgotPasswordHandler $forgotPasswordHandler,
-        private UserRepository        $userRepository,
-        private EmailService          $emailService,
+        private UserRepository $userRepository,
+        private EmailService $emailService,
         private ResetPasswordHandler $resetPasswordHandler,
         private UserPasswordHasherInterface $passwordHasher,
-    )
-    {}
+    ) {
+    }
 
     #[Route('/register', name: 'register')]
     public function register(Request $request): Response
@@ -37,14 +40,15 @@ class UserController extends AbstractController
         $form = $this->registerHandler->prepare($user);
         $registered = $this->registerHandler->handle($form, $request, $this->passwordHasher);
 
-        if($registered instanceof User){
+        if ($registered instanceof User) {
             $this->emailService->sendAccountConfirmationEmail($registered);
             $this->addFlash('success', 'Un email vous a été envoyé pour activer votre compte.');
+
             return $this->redirectToRoute('login');
         }
 
         return $this->renderForm('user/register.html.twig', [
-            'form' => $form
+            'form' => $form,
         ]);
     }
 
@@ -65,16 +69,18 @@ class UserController extends AbstractController
     {
         try {
             $user = $this->userRepository->findOneById($user_id);
-            if($user === null){
+            if ($user === null) {
                 throw new Exception();
             }
-            if($user->getConfirmationToken() === $confirmation_token){
+            if ($user->getConfirmationToken() === $confirmation_token) {
                 $this->userRepository->confirm($user);
             }
             $this->addFlash('success', 'Votre compte a bien été validé.');
+
             return $this->redirectToRoute('login');
         } catch (Exception) {
             $this->addFlash('danger', 'Une erreur s’est produite durant la validation de votre compte.');
+
             return $this->redirectToRoute('home');
         }
     }
@@ -84,17 +90,21 @@ class UserController extends AbstractController
     {
         $user = new User();
         $form = $this->forgotPasswordHandler->prepare($user, []);
-        try{
-            /** @var User $user */
+        try {
             $user = $this->forgotPasswordHandler->handle($form, $request);
-            if($user !== null){
+            if ($user instanceof User) {
                 $this->emailService->sendResetPasswordEmail($user);
-                $this->addFlash('success', 'Un email vous a été envoyé pour que vous puissiez changer de mot de passe');
+                $this->addFlash(
+                    'success',
+                    'Un email vous a été envoyé pour que vous puissiez changer de mot de passe'
+                );
+
                 return $this->redirectToRoute('login');
             }
-        }catch(BadCredentialsException){
+        } catch (BadCredentialsException) {
             $form->addError(new FormError('Aucun utilisateur ne correspond à ce nom d’utilisateur.'));
         }
+
         return $this->renderForm('user/forgot_password.html.twig', [
             'form' => $form,
         ]);
@@ -105,30 +115,32 @@ class UserController extends AbstractController
     {
         try {
             $user = $this->userRepository->findOneById($user_id);
-            if($user === null){
+            if ($user === null) {
                 throw new Exception();
             }
-            if($user->getForgotPasswordToken() !== $forgot_password_token){
+            if ($user->getForgotPasswordToken() !== $forgot_password_token) {
                 throw new Exception();
             }
-            $user = new User();
-            $form = $this->resetPasswordHandler->prepare($user, []);
+            $data = new ResetPasswordData('', '');
+            $form = $this->resetPasswordHandler->prepare($data, []);
             $passwordIsUpdated = $this->resetPasswordHandler->handle($form, $request, $this->passwordHasher);
 
-            if(false === $passwordIsUpdated){
+            if ($passwordIsUpdated === false) {
                 $this->addFlash('danger', 'Une erreur s’est produite durant la modification de votre mot de passe');
-            }elseif(true === $passwordIsUpdated){
+            } elseif ($passwordIsUpdated === true) {
                 $this->addFlash('success', 'Votre mot de passe a bien été modifié.');
+
                 return $this->redirectToRoute('login');
             }
         } catch (Exception) {
             $this->addFlash('danger', 'Une erreur s’est produite, veuillez refaire une demande.');
+
             return $this->redirectToRoute('forgot_password');
         }
+
         return $this->renderForm('user/reset_password.html.twig', [
             'form' => $form,
             'user_id' => $user_id,
         ]);
     }
-
 }

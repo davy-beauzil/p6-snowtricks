@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form\ForgotPassword;
 
 use App\Entity\User;
@@ -16,7 +18,8 @@ class ForgotPasswordForm extends AbstractType
             ->add('username', TextType::class, [
                 'label' => 'Nom d’utilisateur',
                 'required' => true,
-            ]);
+            ])
+        ;
     }
 
     public function getBlockPrefix(): string

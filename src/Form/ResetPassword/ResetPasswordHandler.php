@@ -4,57 +4,70 @@ declare(strict_types=1);
 
 namespace App\Form\ResetPassword;
 
-use App\Entity\User;
 use App\Repository\UserRepository;
-use Doctrine\ORM\NonUniqueResultException;
+use App\Services\SecurityService;
+use DateTimeImmutable;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Throwable;
 
-class ResetPasswordHandler {
-
+class ResetPasswordHandler
+{
     public function __construct(
         private FormFactoryInterface $formFactory,
         private ManagerRegistry $doctrine,
         private UserRepository $userRepository,
-    )
-    {}
+    ) {
+    }
 
-    public function prepare(User $user, array $options = []): FormInterface
+    public function prepare(ResetPasswordData $data, array $options = []): FormInterface
     {
-        return $this->formFactory->create(ResetPasswordForm::class, $user, $options);
+        return $this->formFactory->create(ResetPasswordForm::class, $data, $options);
     }
 
     public function handle(FormInterface $form, Request $request, UserPasswordHasherInterface $passwordHasher): ?bool
     {
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()){
-            /** @var User $data */
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var ResetPasswordData $data */
             $data = $form->getData();
             try {
-                $user = $this->userRepository->findOneById($data->getId());
-                if(!$data->checkStrengthPassword()){
-                    $form->addError(new FormError('Votre mot de passe doit faire au moins 8 caractères et comporter un chiffre et un caractère spécial (@ - _ / ou !).'));
+                $user = $this->userRepository->findOneById($data->id);
+                if ($user === null) {
+                    throw new Exception();
+                }
+                if (! SecurityService::checkStrengthPassword($data->password)) {
+                    $form->addError(
+                        new FormError(
+                            'Votre mot de passe doit faire au moins 8 caractères et comporter un chiffre et un caractère spécial (@ - _ / ou !).'
+                        )
+                    );
+
                     return false;
                 }
                 $em = $this->doctrine->getManager();
-                $user->setPassword($passwordHasher->hashPassword($user, $data->getPassword()));
-                $user->setUpdatedAt(new \DateTimeImmutable());
+                $user->setPassword($passwordHasher->hashPassword($user, $data->password));
+                $user->setUpdatedAt(new DateTimeImmutable());
                 $user->setForgotPasswordToken(bin2hex(random_bytes(64)));
                 $em->persist($user);
                 $em->flush();
+
                 return true;
-            } catch (\Throwable $e) {
-                dd($e->getMessage());
-                $form->addError(new FormError('Une erreur s’est produite lors de la modification de votre mot de passe.'));
+            } catch (Throwable) {
+                $form->addError(
+                    new FormError('Une erreur s’est produite lors de la modification de votre mot de passe.')
+                );
+
                 return false;
             }
         }
+
         return null;
     }
-
 }

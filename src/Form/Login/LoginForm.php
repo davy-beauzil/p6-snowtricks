@@ -11,24 +11,25 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class LoginForm extends AbstractType {
-
+class LoginForm extends AbstractType
+{
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('_username', TextType::class, [
-            'label' => false,
-            'required' => true,
-            'attr' => [
-                'placeholder' => 'Nom d’utilisateur'
-            ]
-        ])
+                'label' => false,
+                'required' => true,
+                'attr' => [
+                    'placeholder' => 'Nom d’utilisateur',
+                ],
+            ])
             ->add('_password', PasswordType::class, [
                 'attr' => [
-                    'placeholder' => 'Mot de passe'
+                    'placeholder' => 'Mot de passe',
                 ],
                 'label' => false,
-            ]);
+            ])
+        ;
     }
 
     public function getBlockPrefix(): string
@@ -42,5 +43,4 @@ class LoginForm extends AbstractType {
             'data_class' => User::class,
         ]);
     }
-
 }

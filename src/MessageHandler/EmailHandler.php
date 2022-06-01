@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\MessageHandler;
 
 use App\Message\Email;
@@ -14,18 +16,18 @@ class EmailHandler
     public function __construct(
         private MailerInterface $mailer,
         private LoggerInterface $logger,
-    ){}
+    ) {
+    }
 
-
-    public function __invoke(Email $email)
+    public function __invoke(Email $email): void
     {
+        $templatedEmail = $email->getTemplatedEmail();
         try {
-            $this->logger->critical('1111111111111111111111111111111111111111111111111111111111111111111111');
-            $this->mailer->send($email->getTemplatedEmail());
-            $this->logger->critical('2222222222222222222222222222222222222222222222222222222222222222222222');
+            $this->logger->info('Envoi email | ' . $templatedEmail->getSubject());
+            $this->mailer->send($templatedEmail);
+            $this->logger->info('Email envoyé avec succès');
         } catch (TransportExceptionInterface $e) {
-            $this->logger->critical('3333333333333333333333333333333333333333333333333333333333333333333333');
-            $this->logger->critical($e->getMessage());
+            $this->logger->critical('Email non envoyé : ' . $e->getMessage());
         }
     }
 }
