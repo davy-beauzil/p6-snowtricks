@@ -32,10 +32,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $password;
 
     #[ORM\Column(type: Types::STRING, length: 100, nullable: true)]
-    private string $firstname;
+    private ?string $firstname = null;
 
     #[ORM\Column(type: Types::STRING, length: 100, nullable: true)]
-    private string $lastname;
+    private ?string $lastname = null;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
     private string $email;
@@ -270,6 +270,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function prePersist(): void
+    {
+        $this->createdAt = new DateTimeImmutable();
+    }
+
+    #[ORM\PreUpdate]
+    public function preUpdate(): void
+    {
+        $this->updatedAt = new DateTimeImmutable();
     }
 
     public function checkStrengthPassword(): bool

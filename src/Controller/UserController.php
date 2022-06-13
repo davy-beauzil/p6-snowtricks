@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\EditProfile\EditProfileHandler;
 use App\Form\ForgotPassword\ForgotPasswordHandler;
 use App\Form\Register\RegisterHandler;
 use App\Form\ResetPassword\ResetPasswordData;
@@ -14,6 +15,7 @@ use App\Services\Emails\EmailService;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -30,6 +32,7 @@ class UserController extends AbstractController
         private EmailService $emailService,
         private ResetPasswordHandler $resetPasswordHandler,
         private UserPasswordHasherInterface $passwordHasher,
+        private EditProfileHandler $editProfileHandler,
     ) {
     }
 
@@ -141,6 +144,28 @@ class UserController extends AbstractController
         return $this->renderForm('user/reset_password.html.twig', [
             'form' => $form,
             'user_id' => $user_id,
+        ]);
+    }
+
+    #[Route('/my-account/edit', name: 'edit_profile', methods: ['GET', 'POST'])]
+    public function editProfile(Request $request): Response
+    {
+        $user = $this->getUser();
+
+        if (! $user instanceof User) {
+            return $this->redirectToRoute('login');
+        }
+
+        $form = $this->editProfileHandler->prepare($user, []);
+        try {
+            $user = $this->editProfileHandler->handle($form, $request);
+        } catch (FileException $e) {
+            $this->addFlash('danger', $e->getMessage());
+        }
+
+        return $this->renderForm('user/edit.html.twig', [
+            'form' => $form,
+            'user' => $user,
         ]);
     }
 }
