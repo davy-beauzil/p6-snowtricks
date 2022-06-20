@@ -1,0 +1,13 @@
+@startuml
+
+!theme mars
+
+Person as "Auteur de la figure" -> TrickController : DELETE /tricks/{slug}/delete
+alt Is not author
+    TrickController -[#red]> Twig : render('401')
+    Twig -[#red]-> Person : Affichage de la page 401 : Unauthorized
+else Is author
+    TrickController -> Database : suppression de la figure
+    Database --> TrickController : return
+end
+@enduml

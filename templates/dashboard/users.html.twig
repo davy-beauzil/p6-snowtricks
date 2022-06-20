@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Snowtricks | Administration{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                <h1 class="text-center display-3 mb-5">Gestion des utilisateurs</h1>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="row">Nom d'utilisateur</th>
+                                <th scope="row">Identité</th>
+                                <th scope="row">Bloquer</th>
+                                <th scope="row">Supprimer</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr scope="col">
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.firstname }} {{ user.lastname }}</td>
+                                <td>
+                                    {% if user.isAdmin == false %}
+                                        {% if user.blockedAt is null %}
+                                        <a href="{{ path('dashboard_users_toggle_block', {'id': user.id}) }}" class="btn btn-sm btn-danger">Bloquer</a>
+                                        {% else %}
+                                        <a href="{{ path('dashboard_users_toggle_block', {'id': user.id}) }}" class="btn btn-sm btn-outline-danger">Débloquer</a>
+                                        {% endif %}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if user.isAdmin == false %}
+                                    <a href="{{ path('dashboard_users_remove', {'id': user.id}) }}" class="btn btn-sm btn-danger">Supprimer</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

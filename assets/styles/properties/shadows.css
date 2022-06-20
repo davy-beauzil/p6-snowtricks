@@ -1,0 +1,3 @@
+.shadow-h-xl{
+    @apply shadow-[0_0_25px_-5px_rgba(0,0,0,0.1)];
+}

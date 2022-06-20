@@ -1,0 +1,20 @@
+parameters:
+    level: max
+    paths:
+        - src
+    excludePaths:
+        - %currentWorkingDirectory%/src/Kernel.php
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+    symfony:
+        container_xml_path: %currentWorkingDirectory%/var/cache/dev/App_KernelDevDebugContainer.xml
+    scanDirectories:
+        - %currentWorkingDirectory%/var/cache/dev/Symfony/Config
+includes:
+#    - vendor/phpstan/phpstan-phpunit/extension.neon
+#    - vendor/phpstan/phpstan-phpunit/rules.neon
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
+    - vendor/phpstan/phpstan-beberlei-assert/extension.neon
+    - vendor/phpstan/phpstan-deprecation-rules/rules.neon
+    - vendor/phpstan/phpstan-symfony/extension.neon
+    - vendor/phpstan/phpstan-symfony/rules.neon

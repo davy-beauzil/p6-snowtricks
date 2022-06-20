@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Snowtricks | Inscription{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                <h1 class="text-center display-3">Inscription</h1>
+                <p class="text-center">Rejoignez l'aventure Snowtricks</p>
+                <div>
+                    {{ form_start(form) }}
+                    {% if form_errors(form) %}
+                        <div class="alert alert-danger">
+                            {{ form_errors(form) }}
+                        </div>
+                    {% endif %}
+                    {{ form_row(form.username) }}
+                    {{ form_row(form.email) }}
+
+                    <div class="mb-3">
+                        {{ form_label(form.password.first) }}
+                        {{ form_widget(form.password.first) }}
+
+                        <small>{{ form_help(form.password.first) }}</small>
+                        <div id="emailHelp" class="form-text">Votre mot de passe doit faire au moins 8 caractères et comporter un chiffre et un caractère spécial (@ - _ / ou !).</div>
+                        <div class="form-error">
+                            {{ form_errors(form.password.first) }}
+                        </div>
+                    </div>
+
+                    {{ form_row(form.password.second) }}
+                    <input type="submit" class="btn btn-primary" value="S'inscrire">
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Snowtricks | Connexion{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                <h1 class="text-center display-3">Connexion</h1>
+                <p class="text-center">Partagez l'aventure Snowtricks</p>
+                <div>
+                    {% if error %}
+                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                    {% endif %}
+                    <form class="d-flex flex-column" action="{{ path('login') }}" method="post">
+                        <input  class="form-control mb-3" type="text" id="username" name="_username" value="{{ last_username }}" placeholder="Nom d'utilisateur"/>
+                        <input  class="form-control mb-3" type="password" id="password" name="_password" placeholder="Mot de passe"/>
+                        <input type="hidden" name="_target_path" value="/register"/>
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                        <a class="fs-6 mb-3 mx-auto" href="{{ path('forgot_password') }}">Mot de passe oublié ?</a>
+                        <input  class="btn btn-primary" type="submit" value="Connexion"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

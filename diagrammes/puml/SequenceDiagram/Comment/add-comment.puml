@@ -1,0 +1,28 @@
+@startuml
+
+!theme mars
+
+Person as "Utilisateur connecté" -> CommentController : POST /tricks/{slug}/add-comment
+
+alt is not logged in or account is not valid
+CommentController -[#red]> Twig : redirect('401')
+Twig -[#red]-> Person : Affichage de la page 401 : Unauthorized
+else IsLogin
+CommentController -> Validator : validation des données
+Validator -> CommentController : return
+    alt Data not valid
+    CommentController -[#red]> Twig : redirect('trick', ['error' => $error])
+    Twig -[#red]-> Person : affichage de la figure avec un message d'erreur
+    else DataValid
+    CommentController -> Database : ajout du commentaire
+    Database --> CommentController : return
+        alt Comment is not add
+        CommentController -[#red]> Twig : redirect('trick', ['error' => $error])
+        Twig -[#red]-> Person : affichage de la figure avec un message d'erreur
+        else CommentIsAdd
+        CommentController -[#green]> Twig : redirect('trick', ['success' => $success])
+            Twig -[#green]-> Person : affichage de la figure avec un message de succès
+        end
+    end
+end
+@enduml

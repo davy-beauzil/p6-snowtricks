@@ -1,0 +1,23 @@
+@startuml
+
+!theme mars
+
+Person as "Utilisateur connecté" -> CommentController : DELETE /comment/{id}
+
+CommentController -> Database : récupération des infos du commentaire
+Database --> CommentController : return
+alt is not author
+CommentController -[#red]> Twig : render('401')
+Twig -[#red]-> Person : Affichage de la page 401 : Unauthorized
+else is author
+CommentController -> Database : suppression du commentaire
+Database --> CommentController : return
+    alt is not deleted
+    CommentController -[#red]> Twig : render('trick', ['error' => $error])
+    Twig -[#red]-> Person : affichage de la figure avec un message d'erreur
+    else is deleted
+    CommentController -[#green]> Twig : render('trick', ['success' => $success])
+    Twig -[#green]-> Person : affichage de la figure avec un message de succès
+    end
+end
+@enduml
