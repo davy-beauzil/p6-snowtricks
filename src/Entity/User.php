@@ -8,6 +8,7 @@ use App\Repository\UserRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use function in_array;
 use function mb_strlen;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -282,6 +283,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function preUpdate(): void
     {
         $this->updatedAt = new DateTimeImmutable();
+    }
+
+    public function isAdmin(): bool
+    {
+        return in_array('ROLE_ADMIN', $this->getRoles(), true);
     }
 
     public function checkStrengthPassword(): bool

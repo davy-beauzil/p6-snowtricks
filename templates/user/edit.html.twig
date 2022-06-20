@@ -12,7 +12,7 @@
                     {% if app.user.profilePicture is not null %}
                     <img src="{{ get_public_image(app.user.profilePicture) }}" alt="Photo de profil" class="mx-auto d-block" style="object-fit: cover; width: 200px; height: 200px;">
                     {% else %}
-                    <img src="{{ get_no_image() }}" alt="Photo de profil par défaut" class="" style="object-fit: cover; width: 200px; height: 200px;">
+                    <img src="{{ get_no_image() }}" alt="Photo de profil par défaut" class="mx-auto d-block" style="object-fit: cover; width: 200px; height: 200px;">
                     {% endif %}
 
                     {{ form_start(form) }}
