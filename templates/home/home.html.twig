@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Snowtricks | Page d'accueil{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row d-flex justify-content-center align-items-center bg-danger" style="background-image: url('{{ asset('images/background.jpg') }}'); height: 75vh !important;">
+            <h1 class="text-center text-uppercase text-white fw-bold" style="filter: invert(0); opacity: 70%; font-size: 156px;">Surfez</h1>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="my-3">
+                <a href="{{ path('tricks_create') }}" class="btn btn-sm btn-success">Créer une figure</a>
+            </div>
+        </div>
+        <div class="row">
+            {# affichages des tricks #}
+        </div>
+    </div>
+{% endblock %}
