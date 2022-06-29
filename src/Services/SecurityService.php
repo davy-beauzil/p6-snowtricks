@@ -27,4 +27,9 @@ class SecurityService
 
         return $size > 8 && $containsSpecialCharacter && $containsNumber;
     }
+
+    public static function generateRamdomId(): string
+    {
+        return bin2hex(random_bytes(64));
+    }
 }

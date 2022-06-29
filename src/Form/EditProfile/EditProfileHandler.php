@@ -7,8 +7,6 @@ namespace App\Form\EditProfile;
 use App\Entity\User;
 use App\Services\ScalewayService;
 use Doctrine\Persistence\ManagerRegistry;
-use Exception;
-use function in_array;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -45,9 +43,6 @@ class EditProfileHandler
                 ->getData()
             ;
             if ($picture instanceof UploadedFile) {
-                if (! in_array($picture->getMimeType(), ['image/png', 'image/jpeg', 'image/jpg'], true)) {
-                    throw new Exception('Le format de l’image doit être PNG, JPG ou JPEG');
-                }
                 $stream = fopen($picture->getPathname(), 'r');
                 $path = sprintf(
                     'users/%s-%s.%s',

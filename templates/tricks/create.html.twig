@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Snowtricks | Création d'une figure{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row my-3">
+
+            <div class="col-12 col-lg-8">
+                <div class="card px-0 my-3">
+                    <h5 class="card-header">
+                        Création d'une figure
+                    </h5>
+
+                    <div class="card-body">
+                        {{ form_start(createTrickForm) }}
+                        {% if form_errors(createTrickForm) %}
+                            <div class="alert alert-danger">
+                                {{ form_errors(createTrickForm) }}
+                            </div>
+                        {% endif %}
+                        {{ form_row(createTrickForm.name) }}
+                        {{ form_row(createTrickForm.description) }}
+                        {{ form_row(createTrickForm.trickGroup) }}
+                        {{ form_row(createTrickForm.mainImage) }}
+                        {{ form_row(createTrickForm.images) }}
+                        <button type="button" class="btn btn-outline-primary btn-sm" id="new_video">Nouvelle vidéo</button>
+                        {{ form_row(createTrickForm.videos) }}
+                        <input type="submit" class="btn btn-sm btn-primary" value="Créer la figure">
+                        {{ form_end(createTrickForm) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-4">
+                <div class="card px-0 my-3">
+                    <h5 class="card-header">
+                        Création d'un groupe de figure
+                    </h5>
+
+                    <div class="card-body">
+                        {{ form_start(createGroupForm) }}
+                        {{ form_widget(createGroupForm) }}
+                        <input type="submit" class="btn btn-sm btn-primary" value="Créer le groupe">
+                        {{ form_end(createGroupForm) }}
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="module" defer>
+
+        const collectionHolder = document.querySelector('#create_trick_videos');
+        let index = collectionHolder.querySelectorAll("fieldset").length;
+        let videoPrototype = collectionHolder.getAttribute('data-prototype');
+
+        const addVideo = () => {
+            console.log(index)
+            collectionHolder.innerHTML += videoPrototype.replace(/__name__/g, index.toString());
+            index++
+        }
+
+        document.querySelector('#new_video').addEventListener('click', addVideo);
+
+    </script>
+{% endblock %}
