@@ -21,7 +21,9 @@ final class Version20220711070206 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE trick ADD author_id VARCHAR(255) NOT NULL');
-        $this->addSql('ALTER TABLE trick ADD CONSTRAINT FK_D8F0A91EF675F31B FOREIGN KEY (author_id) REFERENCES `user` (id)');
+        $this->addSql(
+            'ALTER TABLE trick ADD CONSTRAINT FK_D8F0A91EF675F31B FOREIGN KEY (author_id) REFERENCES `user` (id)'
+        );
         $this->addSql('CREATE INDEX IDX_D8F0A91EF675F31B ON trick (author_id)');
     }
 

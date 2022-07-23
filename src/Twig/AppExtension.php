@@ -44,7 +44,7 @@ class AppExtension extends AbstractExtension
         return $this->scalewayService->getUrlForPrivateFile(self::NO_IMAGE_PATH);
     }
 
-    public function getEmbedUrl(string $url): string
+    public function getEmbedUrl(string $url): ?string
     {
         return TransformUrlService::getEmbedUrl($url);
     }

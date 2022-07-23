@@ -29,7 +29,7 @@ class Image
     private DateTimeImmutable $updatedAt;
 
     #[ORM\ManyToOne(targetEntity: Trick::class, inversedBy: 'images')]
-    #[ORM\JoinColumn(nullable: true, onDelete: "CASCADE")]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private Trick $trick;
 
     public function getId(): string
@@ -37,7 +37,7 @@ class Image
         return $this->id;
     }
 
-    public function getPath(): ?string
+    public function getPath(): string
     {
         return $this->path;
     }

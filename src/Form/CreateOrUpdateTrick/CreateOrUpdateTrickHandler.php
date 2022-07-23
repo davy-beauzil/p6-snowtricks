@@ -12,17 +12,18 @@ use App\Exception\CreateTrickException;
 use App\Repository\ImageRepository;
 use App\Repository\TrickRepository;
 use App\Services\ScalewayService;
-use App\Services\SecurityService;
 use App\Services\TransformUrlService;
-use Symfony\Component\Security\Core\Security;
 use function array_key_exists;
+use Exception;
 use function is_array;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Throwable;
 
 class CreateOrUpdateTrickHandler
 {
@@ -58,11 +59,13 @@ class CreateOrUpdateTrickHandler
                 $this->trickRepository->add($trick, true);
 
                 return $trick;
-            } catch (CreateTrickException $e){
+            } catch (CreateTrickException $e) {
                 $form->addError(new FormError($e->getMessage()));
+
                 return null;
-            }catch (\Throwable $e) {
+            } catch (Throwable) {
                 $form->addError(new FormError('Une erreur est survenue lors de l’enregistrement de la figure'));
+
                 return null;
             }
         }
@@ -83,12 +86,15 @@ class CreateOrUpdateTrickHandler
                 $this->setSlug($trick, true);
                 $this->setVideos($request, $trick);
                 $this->trickRepository->add($trick, true);
+
                 return $trick;
-            } catch (CreateTrickException $e){
+            } catch (CreateTrickException $e) {
                 $form->addError(new FormError($e->getMessage()));
+
                 return null;
-            } catch (\Throwable) {
+            } catch (Throwable) {
                 $form->addError(new FormError('Une erreur est survenue lors de la modification de la figure'));
+
                 return null;
             }
         }
@@ -96,9 +102,6 @@ class CreateOrUpdateTrickHandler
         return null;
     }
 
-    /**
-     * @throws \Exception
-     */
     private function setMainImage(Request $request, Trick $trick): void
     {
         $mainImage = is_array($request->files->get('create_trick')) && array_key_exists(
@@ -110,7 +113,7 @@ class CreateOrUpdateTrickHandler
 
         // On vérifie que l'image est présente
         if (! $mainImage instanceof UploadedFile && $trick->getMainImage() === null) {
-            throw new \Exception('Vous devez obligatoirement ajouter une image principale.');
+            throw new Exception('Vous devez obligatoirement ajouter une image principale.');
         }
 
         // Si l'image doit être remplacée, on supprime l'ancienne
@@ -118,7 +121,7 @@ class CreateOrUpdateTrickHandler
             $this->scalewayService->removeFile($trick->getMainImage()->getPath());
         }
 
-        if($mainImage instanceof UploadedFile){
+        if ($mainImage instanceof UploadedFile) {
             $stream = fopen($mainImage->getPathname(), 'r');
             $path = sprintf(
                 'tricks/%s-%s.%s',
@@ -175,7 +178,7 @@ class CreateOrUpdateTrickHandler
     private function setAuthor(Trick $trick): void
     {
         $currentUser = $this->security->getUser();
-        if(!$currentUser instanceof User){
+        if (! $currentUser instanceof User) {
             throw new CreateTrickException('Une erreur est survenue lors de l’enregistrement de la figure');
         }
         $trick->setAuthor($currentUser);

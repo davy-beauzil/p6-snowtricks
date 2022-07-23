@@ -30,7 +30,7 @@ class Video
     private DateTimeImmutable $updatedAt;
 
     #[ORM\ManyToOne(targetEntity: Trick::class, inversedBy: 'videos')]
-    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private Trick $trick;
 
     public function getId(): string

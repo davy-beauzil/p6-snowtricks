@@ -21,7 +21,9 @@ final class Version20220720160938 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE trick CHANGE main_image_id main_image_id VARCHAR(255) DEFAULT NULL');
-        $this->addSql('ALTER TABLE trick ADD CONSTRAINT FK_D8F0A91EE4873418 FOREIGN KEY (main_image_id) REFERENCES image (id) ON DELETE SET NULL');
+        $this->addSql(
+            'ALTER TABLE trick ADD CONSTRAINT FK_D8F0A91EE4873418 FOREIGN KEY (main_image_id) REFERENCES image (id) ON DELETE SET NULL'
+        );
     }
 
     public function down(Schema $schema): void

@@ -88,7 +88,7 @@
                 <span class="badge bg-primary">Groupe : {{ trick.trickGroup.name }}</span>
                 <span class="badge bg-primary">Ecrit le : {{ trick.createdAt|date('d/m/y à H:i') }}</span>
                 {% if trick.createdAt != trick.updatedAt %}
-                <span class="badge bg-primary">Ecrit le : {{ trick.createdAt|date('d/m/y à H:i') }}</span>
+                <span class="badge bg-primary">Modifié le : {{ trick.updatedAt|date('d/m/y à H:i') }}</span>
                 {% endif %}
             </div>
 

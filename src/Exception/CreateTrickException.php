@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Exception;
 
-class CreateTrickException extends \RuntimeException
-{
+use RuntimeException;
 
+class CreateTrickException extends RuntimeException
+{
 }

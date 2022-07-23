@@ -64,8 +64,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $updatedAt;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection<int, \App\Entity\Trick>|\App\Entity\Trick[]
+     */
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Trick::class, orphanRemoval: true)]
-    private $tricks;
+    private Collection $tricks;
 
     public function __construct()
     {
@@ -331,21 +334,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addTrick(Trick $trick): self
     {
-        if (!$this->tricks->contains($trick)) {
+        if (! $this->tricks->contains($trick)) {
             $this->tricks[] = $trick;
             $trick->setAuthor($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTrick(Trick $trick): self
-    {
-        if ($this->tricks->removeElement($trick)) {
-            // set the owning side to null (unless already changed)
-            if ($trick->getAuthor() === $this) {
-                $trick->setAuthor(null);
-            }
         }
 
         return $this;

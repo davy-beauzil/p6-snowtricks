@@ -65,7 +65,7 @@ class CreateOrUpdateTrickForm extends AbstractType
                     'label' => false,
                     'required' => false,
                     'attr' => [
-                        'placeholder' => 'www.example.com'
+                        'placeholder' => 'www.example.com',
                     ],
                 ],
                 'mapped' => false,
@@ -77,7 +77,7 @@ class CreateOrUpdateTrickForm extends AbstractType
 
 //        dd($trick->getMainImage());
 
-        if($trick->getMainImage() === null){
+        if ($trick->getMainImage() === null) {
             $builder->add('mainImage', FileType::class, [
                 'label' => 'Image principale',
                 'required' => true,
