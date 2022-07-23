@@ -18,45 +18,32 @@ class TransformUrlService
 
     public const DAYLIMOTION_BASE_EMBED = 'https://www.dailymotion.com/embed/video/';
 
+    public static function getEmbedUrl(string $url): ?string
+    {
+        try {
+            foreach (self::YOUTUBE_BASE_URL as $item) {
+                if (str_contains($url, $item)) {
+                    $code = self::getYoutubeCode($url);
+
+                    return self::YOUTUBE_BASE_EMBED . $code;
+                }
+            }
+            foreach (self::DAYLIMOTION_BASE_URL as $item) {
+                if (str_contains($url, $item)) {
+                    $code = self::getDaylimotionCode($url);
+
+                    return self::DAYLIMOTION_BASE_EMBED . $code;
+                }
+            }
+            throw new Exception();
+        } catch (Exception) {
+            return null;
+        }
+    }
+
     public static function isValid(string $url): bool
     {
-        foreach (self::YOUTUBE_BASE_URL as $item) {
-            if (str_contains($url, $item)) {
-                return true;
-            }
-        }
-        foreach (self::DAYLIMOTION_BASE_URL as $item) {
-            if (str_contains($url, $item)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public static function getCode(string $url): string
-    {
-        foreach (self::YOUTUBE_BASE_URL as $item) {
-            if (str_contains($url, $item)) {
-                return self::getYoutubeCode($url);
-            }
-        }
-        foreach (self::DAYLIMOTION_BASE_URL as $item) {
-            if (str_contains($url, $item)) {
-                return self::getDaylimotionCode($url);
-            }
-        }
-        throw new Exception('Vous ne pouvez ajouter que des vidéos provenant de Youtube ou Daylimotion.');
-    }
-
-    public static function generateYoutubeEmbedUrl(string $code): string
-    {
-        return self::YOUTUBE_BASE_EMBED . $code;
-    }
-
-    public static function generateDaylimotionEmbedUrl(string $code): string
-    {
-        return self::DAYLIMOTION_BASE_EMBED . $code;
+        return self::getEmbedUrl($url) !== null;
     }
 
     /**

@@ -2,18 +2,20 @@
 
 {% block title %}Snowtricks | Inscription{% endblock %}
 
+{% set user = form.vars.value %}
+
 {% block content %}
     <div class="container">
         <div class="row">
             <div class="col-md-6 mx-auto">
-                <h1 class="text-center display-3 mb-5">Mon compte</h1>
-                <div>
-
+                <div class="mt-5">
                     {% if app.user.profilePicture is not null %}
-                    <img src="{{ get_public_image(app.user.profilePicture) }}" alt="Photo de profil" class="mx-auto d-block" style="object-fit: cover; width: 200px; height: 200px;">
+                    <img src="{{ get_public_image(app.user.profilePicture) }}" alt="Photo de profil" class="mx-auto d-block rounded-circle" style="object-fit: cover; width: 200px; height: 200px;">
                     {% else %}
-                    <img src="{{ get_no_image() }}" alt="Photo de profil par défaut" class="mx-auto d-block" style="object-fit: cover; width: 200px; height: 200px;">
+                    <img src="{{ get_no_image() }}" alt="Photo de profil par défaut" class="mx-auto d-block rounded-circle" style="object-fit: cover; width: 200px; height: 200px;">
                     {% endif %}
+                </div>
+                <p class="display-6 text-center">{{ user.username }}</p>
 
                     {{ form_start(form) }}
                     {% if form_errors(form) %}

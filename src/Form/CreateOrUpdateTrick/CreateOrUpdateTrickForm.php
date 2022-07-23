@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Form\CreateTrick;
+namespace App\Form\CreateOrUpdateTrick;
 
 use App\Entity\Group;
 use App\Entity\Trick;
@@ -18,10 +18,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\All;
 use Symfony\Component\Validator\Constraints\File;
 
-class CreateTrickForm extends AbstractType
+class CreateOrUpdateTrickForm extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        /** @var Trick $trick */
+        $trick = $options['data'];
+
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Nom de la figure',
@@ -39,19 +42,6 @@ class CreateTrickForm extends AbstractType
                 'expanded' => false,
                 'mapped' => true,
             ])
-            ->add('mainImage', FileType::class, [
-                'label' => 'Image mise en avant',
-                'required' => true,
-                'mapped' => false,
-                'constraints' => [
-                    new File([
-                        'maxSize' => '2048k',
-                        'mimeTypes' => ['image/*'],
-                        'mimeTypesMessage' => 'Vous devez importer une image valide',
-                    ]),
-                ],
-                'help' => 'Ce sera l’image affichée par défaut',
-            ])
             ->add('images', FileType::class, [
                 'label' => 'Images secondaires',
                 'required' => false,
@@ -65,28 +55,43 @@ class CreateTrickForm extends AbstractType
                             'mimeTypesMessage' => 'Vous devez importer des images valides',
                         ]),
                     ]),
-                    //                    new File([
-                    //                        'maxSize' => '2048k',
-                    //                        'mimeTypes' => ['image/*'],
-                    //                        'mimeTypesMessage' => 'Vous devez importer des images valides',
-                    //                    ]),
                 ],
                 'help' => 'Ces images seront visibles depuis la page de la figure',
             ])
             ->add('videos', CollectionType::class, [
                 'entry_type' => UrlType::class,
-                'label' => 'Vidéos',
+                'label' => 'Vidéos Youtube ou Daylimotion',
                 'entry_options' => [
                     'label' => false,
                     'required' => false,
+                    'attr' => [
+                        'placeholder' => 'www.example.com'
+                    ],
                 ],
                 'mapped' => false,
                 'by_reference' => false,
                 'allow_add' => true,
                 'allow_delete' => true,
-                'help' => 'Vidéos provenant de Youtube ou Daylimotion',
             ])
         ;
+
+//        dd($trick->getMainImage());
+
+        if($trick->getMainImage() === null){
+            $builder->add('mainImage', FileType::class, [
+                'label' => 'Image principale',
+                'required' => true,
+                'mapped' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '2048k',
+                        'mimeTypes' => ['image/*'],
+                        'mimeTypesMessage' => 'Vous devez importer une image valide',
+                    ]),
+                ],
+                'help' => 'Ce sera l’image affichée par défaut',
+            ]);
+        }
     }
 
     public function getBlockPrefix(): string

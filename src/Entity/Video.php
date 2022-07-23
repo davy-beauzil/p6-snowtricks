@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use App\Repository\VideoRepository;
 use App\Services\SecurityService;
+use App\Services\TransformUrlService;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -29,7 +30,7 @@ class Video
     private DateTimeImmutable $updatedAt;
 
     #[ORM\ManyToOne(targetEntity: Trick::class, inversedBy: 'videos')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     private Trick $trick;
 
     public function getId(): string
@@ -83,6 +84,11 @@ class Video
         $this->trick = $trick;
 
         return $this;
+    }
+
+    public function getEmbedUrl(): ?string
+    {
+        return TransformUrlService::getEmbedUrl($this->url);
     }
 
     #[ORM\PrePersist]

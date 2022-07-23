@@ -29,7 +29,7 @@ class Image
     private DateTimeImmutable $updatedAt;
 
     #[ORM\ManyToOne(targetEntity: Trick::class, inversedBy: 'images')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true, onDelete: "CASCADE")]
     private Trick $trick;
 
     public function getId(): string

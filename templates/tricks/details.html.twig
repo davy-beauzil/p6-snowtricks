@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Snowtricks | Création d'une figure{% endblock %}
+
+{% block stylesheets %}
+ {{ parent() }}
+    <style>
+        .main_image{
+            position: relative;
+            height: 50vh;
+        }
+        .main_image::before{
+            content: "";
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-image: url({{ get_public_image(trick.mainImage.path) }});
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.3);
+        }
+        .main_image_button{
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+        .main_image_title{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .gallery{
+            overflow-x: scroll;
+        }
+        .gallery_image{
+            width: auto;
+            height: 200px;
+        }
+    </style>
+{% endblock %}
+
+{% block footer_javascript %}
+    {{ parent() }}
+{#    {% include 'tricks/_delete_button_javascript.html.twig' %}#}
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid p-0 mb-5">
+        <div class="row">
+            <div class="main_image w-100">
+                <div class="main_image_button">
+                    {% include "tricks/_edit_button.html.twig" with {'edit_url': path('tricks_edit', {'slug': trick.slug})} %}
+                    {% include "tricks/_delete_button.html.twig" with {'slug': trick.slug} %}
+                </div>
+                <p class="main_image_title display-1 text-white text-capitalize">{{ trick.name }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="container mb-3">
+        <div class="row gap-5">
+            <div class="gallery rounded shadow-lg p-3 d-flex flex-row gap-4">
+                <img src="{{ get_public_image(trick.mainImage.path) }}" class="gallery_image" alt="{{ trick.name }}">
+
+                {% for image in trick.images %}
+                <img src="{{ get_public_image(image.path) }}" class="gallery_image" alt="{{ trick.name }}">
+                {% endfor %}
+
+                {% for video in trick.videos %}
+                    <iframe
+                            width="300"
+                            height="200"
+                            src="{{ get_embed_url(video.url) }}"
+                            title="Video player"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen
+                    ></iframe>
+                {% endfor %}
+            </div>
+
+            <p class="">{{ trick.description }}</p>
+
+            <div class="d-flex justify-content-center gap-3">
+                <span class="badge bg-primary">Auteur : {{ trick.author.username }}</span>
+                <span class="badge bg-primary">Groupe : {{ trick.trickGroup.name }}</span>
+                <span class="badge bg-primary">Ecrit le : {{ trick.createdAt|date('d/m/y à H:i') }}</span>
+                {% if trick.createdAt != trick.updatedAt %}
+                <span class="badge bg-primary">Ecrit le : {{ trick.createdAt|date('d/m/y à H:i') }}</span>
+                {% endif %}
+            </div>
+
+
+        </div>
+    </div>
+{% endblock %}

@@ -26,7 +26,7 @@ class EmailHandler
             $this->logger->info('Envoi email | ' . $templatedEmail->getSubject());
             $this->mailer->send($templatedEmail);
             $this->logger->info('Email envoyé avec succès');
-        } catch (TransportExceptionInterface $e) {
+        } catch (\Throwable $e) {
             $this->logger->critical('Email non envoyé : ' . $e->getMessage());
         }
     }

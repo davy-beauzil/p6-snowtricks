@@ -13,21 +13,21 @@
                     </h5>
 
                     <div class="card-body">
-                        {{ form_start(createTrickForm) }}
-                        {% if form_errors(createTrickForm) %}
+                        {{ form_start(trickForm) }}
+                        {% if form_errors(trickForm) %}
                             <div class="alert alert-danger">
-                                {{ form_errors(createTrickForm) }}
+                                {{ form_errors(trickForm) }}
                             </div>
                         {% endif %}
-                        {{ form_row(createTrickForm.name) }}
-                        {{ form_row(createTrickForm.description) }}
-                        {{ form_row(createTrickForm.trickGroup) }}
-                        {{ form_row(createTrickForm.mainImage) }}
-                        {{ form_row(createTrickForm.images) }}
+                        {{ form_row(trickForm.name) }}
+                        {{ form_row(trickForm.description) }}
+                        {{ form_row(trickForm.trickGroup) }}
+                        {{ form_row(trickForm.mainImage) }}
+                        {{ form_row(trickForm.images) }}
                         <button type="button" class="btn btn-outline-primary btn-sm" id="new_video">Nouvelle vidéo</button>
-                        {{ form_row(createTrickForm.videos) }}
+                        {{ form_row(trickForm.videos) }}
                         <input type="submit" class="btn btn-sm btn-primary" value="Créer la figure">
-                        {{ form_end(createTrickForm) }}
+                        {{ form_end(trickForm) }}
                     </div>
                 </div>
             </div>
@@ -39,10 +39,10 @@
                     </h5>
 
                     <div class="card-body">
-                        {{ form_start(createGroupForm) }}
-                        {{ form_widget(createGroupForm) }}
+                        {{ form_start(groupForm) }}
+                        {{ form_widget(groupForm) }}
                         <input type="submit" class="btn btn-sm btn-primary" value="Créer le groupe">
-                        {{ form_end(createGroupForm) }}
+                        {{ form_end(groupForm) }}
                     </div>
                 </div>
             </div>

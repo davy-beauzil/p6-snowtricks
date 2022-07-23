@@ -41,15 +41,21 @@ class TrickRepository extends ServiceEntityRepository
         }
     }
 
-    public function trickExists(string $slug): bool
+    public function trickExists(string $slug, string $idToAvoid = null): bool
     {
         try {
             /** @var int $count */
-            $count = $this->createQueryBuilder('t')
+            $qb = $this->createQueryBuilder('t')
                 ->select('count(t.slug)')
                 ->where('t.slug = :slug')
-                ->setParameter('slug', $slug)
-                ->getQuery()
+                ->setParameter('slug', $slug);
+
+            if($idToAvoid !== null){
+                $qb->andWhere('t.id != :id')
+                    ->setParameter('id', $idToAvoid);
+            }
+
+            $count = $qb->getQuery()
                 ->getSingleScalarResult()
             ;
 

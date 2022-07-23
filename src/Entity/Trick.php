@@ -31,7 +31,8 @@ class Trick
     private string $slug;
 
     #[ORM\OneToOne(targetEntity: Image::class, cascade: ['persist', 'remove'])]
-    private Image $mainImage;
+    #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
+    private ?Image $mainImage = null;
 
     /**
      * @var Collection<Image>
@@ -46,7 +47,7 @@ class Trick
     private Collection $videos;
 
     #[ORM\ManyToOne(targetEntity: Group::class, inversedBy: 'tricks')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     private Group $trickGroup;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
@@ -57,6 +58,10 @@ class Trick
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?DateTimeImmutable $blockedAt;
+
+    #[ORM\ManyToOne(targetEntity: User::class, fetch: "EAGER", inversedBy: 'tricks')]
+    #[ORM\JoinColumn(nullable: false)]
+    private User $author;
 
     public function __construct()
     {
@@ -220,5 +225,17 @@ class Trick
     public function preUpdate(): void
     {
         $this->updatedAt = new DateTimeImmutable();
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
+
+        return $this;
     }
 }
