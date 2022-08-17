@@ -92,6 +92,24 @@
                 {% endif %}
             </div>
 
+            <div>
+                {{ form_start(commentForm) }}
+                {{ form_widget(commentForm) }}
+                <input type="submit" class="btn btn-primary" value="Ajouter">
+                {{ form_end(commentForm) }}
+
+                {% for comment in trick.comments %}
+                    <hr>
+                    <div class="d-flex flex-row justify-content-between w-100">
+                        <p class="fw-bold d-inline mb-0">{{ comment.author.username }}</p>
+                        {% if app.user == comment.author %}
+                        <a href="#" class="btn btn-sm btn-danger">Supprimer</a>
+                        {% endif %}
+                    </div>
+                    {{ comment.comment }}
+                {% endfor %}
+            </div>
+
 
         </div>
     </div>

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Group;
 use App\Entity\Trick;
-use App\Form\CreateGroup\CreateGroupHandler;
+use App\Form\CommentAdd\CommentAddHandler;
 use App\Form\CreateOrUpdateTrick\CreateOrUpdateTrickHandler;
 use App\Repository\TrickRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,9 +18,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class TrickController extends BaseController
 {
     public function __construct(
-        private CreateGroupHandler $createGroupHandler,
+        private CommentAddHandler          $createGroupHandler,
         private CreateOrUpdateTrickHandler $createTrickHandler,
-        private TrickRepository $trickRepository,
+        private TrickRepository            $trickRepository,
+        private CommentAddHandler $commentAddHandler,
     ) {
     }
 
@@ -48,8 +50,8 @@ class TrickController extends BaseController
         ]);
     }
 
-    #[Route('/{slug}', name: 'tricks_details', methods: Request::METHOD_GET)]
-    public function details(string $slug): Response
+    #[Route('/{slug}', name: 'tricks_details', methods: [Request::METHOD_GET, Request::METHOD_POST])]
+    public function details(string $slug, Request $request): Response
     {
         $trick = $this->trickRepository->findOneBy([
             'slug' => $slug,
@@ -59,8 +61,13 @@ class TrickController extends BaseController
             $this->redirectToRoute('home');
         }
 
-        return $this->render('tricks/details.html.twig', [
+        $comment = new Comment();
+        $commentForm = $this->commentAddHandler->prepare($comment, []);
+        $this->commentAddHandler->handle($commentForm, $request, $trick);
+
+        return $this->renderForm('tricks/details.html.twig', [
             'trick' => $trick,
+            'commentForm' => $commentForm,
         ]);
     }
 

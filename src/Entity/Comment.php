@@ -14,7 +14,7 @@ class Comment
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'NONE')]
     #[ORM\Column(type: Types::STRING)]
-    private ?int $id = null;
+    private string $id;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $comment = null;
@@ -36,7 +36,7 @@ class Comment
     #[ORM\Column]
     private ?\DateTimeImmutable $updated_at = null;
 
-    public function getId(): ?int
+    public function getId(): string
     {
         return $this->id;
     }
