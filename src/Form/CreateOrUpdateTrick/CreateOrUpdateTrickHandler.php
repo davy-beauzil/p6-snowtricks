@@ -50,11 +50,11 @@ class CreateOrUpdateTrickHandler
             try {
                 /** @var Trick $trick */
                 $trick = $form->getData();
+                $this->setSlug($trick);
+                $this->setAuthor($trick);
                 $this->setMainImage($request, $trick);
                 $this->setSecondaryImages($request, $trick);
-                $this->setSlug($trick);
                 $this->setVideos($request, $trick);
-                $this->setAuthor($trick);
 //                $this->imageRepository->add($mainImageEntity, true);
                 $this->trickRepository->add($trick, true);
 
@@ -63,7 +63,8 @@ class CreateOrUpdateTrickHandler
                 $form->addError(new FormError($e->getMessage()));
 
                 return null;
-            } catch (Throwable) {
+            } catch (Throwable $e) {
+                dd($e->getMessage());
                 $form->addError(new FormError('Une erreur est survenue lors de l’enregistrement de la figure'));
 
                 return null;
@@ -132,6 +133,7 @@ class CreateOrUpdateTrickHandler
             $this->scalewayService->uploadImage($path, $stream);
             $mainImageEntity = new Image();
             $mainImageEntity->setPath($path);
+            $mainImageEntity->setMainImageTrick($trick);
             $this->imageRepository->add($mainImageEntity, true);
             $trick->setMainImage($mainImageEntity);
         }

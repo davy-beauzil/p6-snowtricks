@@ -34,7 +34,7 @@ class BaseController extends AbstractController
     public function allowAccessOnlyUser(User $user): void
     {
         if ($this->getUser() !== $user) {
-            throw new AccessDeniedException('Vous n’avez pas accès à cette ressource');
+            throw $this->createAccessDeniedException('Vous n’avez pas accès à cette ressource.');
         }
     }
 }

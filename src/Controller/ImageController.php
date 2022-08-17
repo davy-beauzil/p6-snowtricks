@@ -32,11 +32,12 @@ class ImageController extends BaseController
             if (! $image instanceof Image) {
                 throw new Exception();
             }
-            $this->allowAccessOnlyUser($image->getTrick()->getAuthor());
+            $this->allowAccessOnlyUser($image->getMainImageTrick() !== null ? $image->getMainImageTrick()->getAuthor() : $image->getTrick()->getAuthor());
             $this->imageRepository->remove($image, true);
             $this->scalewayService->removeFile($image->getPath());
             $this->addFlash('success', 'L’image a bien été supprimée');
-        } catch (Throwable) {
+        } catch (Throwable $e) {
+            dd($e);
             $this->addFlash('danger', 'Une erreur est survenue lors de la suppression de l’image');
         }
 

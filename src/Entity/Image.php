@@ -28,9 +28,12 @@ class Image
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $updatedAt;
 
-    #[ORM\ManyToOne(targetEntity: Trick::class, inversedBy: 'images')]
+    #[ORM\OneToOne(targetEntity: Trick::class, cascade: ['persist'])]
+    private ?Trick $mainImageTrick = null;
+
+    #[ORM\ManyToOne(targetEntity: Trick::class, cascade: ['persist'], inversedBy: 'images')]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
-    private Trick $trick;
+    private ?Trick $trick = null;
 
     public function getId(): string
     {
@@ -73,12 +76,12 @@ class Image
         return $this;
     }
 
-    public function getTrick(): Trick
+    public function getTrick(): ?Trick
     {
         return $this->trick;
     }
 
-    public function setTrick(Trick $trick): self
+    public function setTrick(?Trick $trick): self
     {
         $this->trick = $trick;
 
@@ -97,5 +100,16 @@ class Image
     public function preUpdate(): void
     {
         $this->updatedAt = new DateTimeImmutable();
+    }
+
+    public function getMainImageTrick(): ?Trick
+    {
+        return $this->mainImageTrick;
+    }
+
+    public function setMainImageTrick(?Trick $trick): self
+    {
+        $this->mainImageTrick = $trick;
+        return $this;
     }
 }
