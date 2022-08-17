@@ -30,7 +30,7 @@ class UserDashboardController extends AbstractController
     public function usersDashboard(): Response
     {
         if (! $this->currentUserIsAdmin()) {
-            return $this->redirectToRoute('register');
+            return $this->redirectToRoute('home');
         }
 
         $users = $this->userRepository->findAll();
@@ -44,7 +44,7 @@ class UserDashboardController extends AbstractController
     public function toggleBlock(Request $request): Response
     {
         if (! $this->currentUserIsAdmin()) {
-            return $this->redirectToRoute('register');
+            return $this->redirectToRoute('home');
         }
 
         try {
@@ -77,7 +77,7 @@ class UserDashboardController extends AbstractController
     public function remove(Request $request): Response
     {
         if (! $this->currentUserIsAdmin()) {
-            return $this->redirectToRoute('register');
+            return $this->redirectToRoute('home');
         }
 
         try {

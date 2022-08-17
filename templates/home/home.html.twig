@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Snowtricks | Page d'accueil{% endblock %}
+
+{% block content %}
+    <div class="position-relative">
+        <div class="container-fluid">
+            <div class="row d-flex justify-content-center align-items-center bg-danger" style="background-image: url('{{ asset('images/background.jpg') }}'); height: 75vh !important;">
+                <h1 class="text-center text-uppercase text-white fw-bold" style="filter: invert(0); opacity: 70%; font-size: 156px;">Surfez</h1>
+            </div>
+        </div>
+        <div class="container position-relative">
+            {% if app.user %}
+            <div class="row">
+                <div class="mt-3">
+                    <a href="{{ path('tricks_create') }}" class="btn btn-sm btn-success">Créer une figure</a>
+                </div>
+            </div>
+            {% endif %}
+            <div class="row mt-3">
+                {# affichages des tricks #}
+                {% for trick in tricks %}
+                    <div class="col col-md-6 col-lg-3 mb-3">
+                        <div class="card">
+                            <a href="{{ path('tricks_details', {'slug': trick.slug}) }}">
+                                <div class="card-header p-0">
+                                    <img src="{{ trick.mainImage is not null ? get_public_image(trick.mainImage.path) : get_private_image("assets/images/no-image2.png")  }}" class="w-100" style="height: 200px; object-fit: cover" alt="Image de la figure">
+                                </div>
+                            </a>
+                            <div class="card-body d-flex justify-content-between">
+                                <p class="d-inline-block">{{ trick.name }}</p>
+                                {% if app.user and app.user.username == trick.author.username %}
+                                    <div>
+                                        {% include 'tricks/_delete_button.html.twig' with {'slug': trick.slug} %}
+                                        {% include "tricks/_edit_button.html.twig" with {'edit_url': path('tricks_edit', {'slug': trick.slug})} %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                {# modals tricks #}
+                <div class="modal fade" id="modal__delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Supprimer une figure</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Voulez-vous vraiment supprimer la figure ?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                <a class="btn btn-danger" id="modal__delete__button">Supprimer</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

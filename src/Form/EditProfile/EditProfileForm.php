@@ -32,7 +32,7 @@ class EditProfileForm extends AbstractType
                 'constraints' => [
                     new File([
                         'maxSize' => '2048k',
-                        'mimeTypes' => ['image/*'],
+                        'mimeTypes' => ['image/png', 'image/jpeg', 'image/jpg'],
                         'mimeTypesMessage' => 'Vous devez importer une image valide',
                     ]),
                 ],

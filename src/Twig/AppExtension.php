@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Twig;
 
 use App\Services\ScalewayService;
+use App\Services\TransformUrlService;
 use Psr\Http\Message\UriInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -24,6 +25,7 @@ class AppExtension extends AbstractExtension
             new TwigFunction('get_public_image', [$this, 'getPublicImage']),
             new TwigFunction('get_private_image', [$this, 'getPrivateImage']),
             new TwigFunction('get_no_image', [$this, 'getNoImage']),
+            new TwigFunction('get_embed_url', [$this, 'getEmbedUrl']),
         ];
     }
 
@@ -40,5 +42,15 @@ class AppExtension extends AbstractExtension
     public function getNoImage(): UriInterface
     {
         return $this->scalewayService->getUrlForPrivateFile(self::NO_IMAGE_PATH);
+    }
+
+    public function getEmbedUrl(string $url): ?string
+    {
+        return TransformUrlService::getEmbedUrl($url);
+    }
+
+    public function getScalewayService(): ScalewayService
+    {
+        return $this->scalewayService;
     }
 }

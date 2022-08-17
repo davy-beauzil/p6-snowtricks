@@ -39,6 +39,9 @@ class UserController extends AbstractController
     #[Route('/register', name: 'register')]
     public function register(Request $request): Response
     {
+        if ($this->getUser() instanceof User) {
+            return $this->redirectToRoute('home');
+        }
         $user = new User();
         $form = $this->registerHandler->prepare($user);
         $registered = $this->registerHandler->handle($form, $request, $this->passwordHasher);
@@ -58,6 +61,9 @@ class UserController extends AbstractController
     #[Route('/login', name: 'login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
+        if ($this->getUser() instanceof User) {
+            return $this->redirectToRoute('home');
+        }
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
 
