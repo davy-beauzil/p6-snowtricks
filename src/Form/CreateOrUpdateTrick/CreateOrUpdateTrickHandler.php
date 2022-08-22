@@ -64,7 +64,6 @@ class CreateOrUpdateTrickHandler
 
                 return null;
             } catch (Throwable $e) {
-                dd($e->getMessage());
                 $form->addError(new FormError('Une erreur est survenue lors de l’enregistrement de la figure'));
 
                 return null;

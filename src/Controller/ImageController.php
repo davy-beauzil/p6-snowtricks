@@ -37,7 +37,6 @@ class ImageController extends BaseController
             $this->scalewayService->removeFile($image->getPath());
             $this->addFlash('success', 'L’image a bien été supprimée');
         } catch (Throwable $e) {
-            dd($e);
             $this->addFlash('danger', 'Une erreur est survenue lors de la suppression de l’image');
         }
 
