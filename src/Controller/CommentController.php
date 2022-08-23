@@ -32,5 +32,4 @@ class CommentController extends BaseController
         }
         return $this->redirectToLastPage();
     }
-
 }
