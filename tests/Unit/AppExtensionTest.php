@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Unit;
 
 use App\Services\ScalewayService;
@@ -7,7 +9,10 @@ use App\Twig\AppExtension;
 use GuzzleHttp\Psr7\Uri;
 use PHPUnit\Framework\TestCase;
 
-class AppExtensionTest extends TestCase
+/**
+ * @internal
+ */
+final class AppExtensionTest extends TestCase
 {
     private AppExtension $appExtension;
 
@@ -16,23 +21,32 @@ class AppExtensionTest extends TestCase
         $this->appExtension = new AppExtension(new ScalewayService());
     }
 
-    public function testGetPublicImage(): void
+    /**
+     * @test
+     */
+    public function getPublicImage(): void
     {
         $url = $this->appExtension->getPublicImage('tests/public-image.png');
-        self::assertSame('https://p6-snowtricks.s3.fr-par.scw.cloud/tests/public-image.png', $url);
+        static::assertSame('https://p6-snowtricks.s3.fr-par.scw.cloud/tests/public-image.png', $url);
     }
 
-    public function testGetPrivateImage(): void
+    /**
+     * @test
+     */
+    public function getPrivateImage(): void
     {
         $url = $this->appExtension->getPublicImage('tests/private-image.png');
-        self::assertSame('https://p6-snowtricks.s3.fr-par.scw.cloud/tests/private-image.png', $url);
+        static::assertSame('https://p6-snowtricks.s3.fr-par.scw.cloud/tests/private-image.png', $url);
     }
 
-    public function testGetNoImage(): void
+    /**
+     * @test
+     */
+    public function getNoImage(): void
     {
         $noImage = $this->appExtension->getNoImage();
-        self::assertSame(Uri::class, $noImage::class);
-        self::assertSame('p6-snowtricks.s3.fr-par.scw.cloud', $noImage->getHost());
-        self::assertSame('/assets/images/no-image.png', $noImage->getPath());
+        static::assertSame(Uri::class, $noImage::class);
+        static::assertSame('p6-snowtricks.s3.fr-par.scw.cloud', $noImage->getHost());
+        static::assertSame('/assets/images/no-image.png', $noImage->getPath());
     }
 }

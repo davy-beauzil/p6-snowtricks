@@ -29,6 +29,7 @@ class Image
     private DateTimeImmutable $updatedAt;
 
     #[ORM\OneToOne(targetEntity: Trick::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private ?Trick $mainImageTrick = null;
 
     #[ORM\ManyToOne(targetEntity: Trick::class, cascade: ['persist'], inversedBy: 'images')]
@@ -110,6 +111,7 @@ class Image
     public function setMainImageTrick(?Trick $trick): self
     {
         $this->mainImageTrick = $trick;
+
         return $this;
     }
 }

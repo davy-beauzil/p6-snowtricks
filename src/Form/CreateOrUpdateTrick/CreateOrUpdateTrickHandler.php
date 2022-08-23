@@ -42,7 +42,7 @@ class CreateOrUpdateTrickHandler
         return $this->formFactory->createNamed('create_trick', CreateOrUpdateTrickForm::class, $trick, $options);
     }
 
-    public function handleCreate(FormInterface $form, Request $request): ?Trick
+    public function handleCreate(FormInterface $form, Request $request): Trick|bool|null
     {
         $form->handleRequest($request);
 
@@ -62,11 +62,11 @@ class CreateOrUpdateTrickHandler
             } catch (CreateTrickException $e) {
                 $form->addError(new FormError($e->getMessage()));
 
-                return null;
-            } catch (Throwable $e) {
+                return false;
+            } catch (Throwable) {
                 $form->addError(new FormError('Une erreur est survenue lors de l’enregistrement de la figure'));
 
-                return null;
+                return false;
             }
         }
 

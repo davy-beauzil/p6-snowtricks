@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\CommentRepository;
 use App\Services\SecurityService;
+use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -25,16 +28,16 @@ class Comment
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $author = null;
+    private User $author;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $blocked_at = null;
+    private ?DateTimeImmutable $blocked_at = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
+    private ?DateTimeImmutable $created_at = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $updated_at = null;
+    private ?DateTimeImmutable $updated_at = null;
 
     public function getId(): string
     {
@@ -65,48 +68,48 @@ class Comment
         return $this;
     }
 
-    public function getAuthor(): ?User
+    public function getAuthor(): User
     {
         return $this->author;
     }
 
-    public function setAuthor(?User $author): self
+    public function setAuthor(User $author): self
     {
         $this->author = $author;
 
         return $this;
     }
 
-    public function getBlockedAt(): ?\DateTimeImmutable
+    public function getBlockedAt(): ?DateTimeImmutable
     {
         return $this->blocked_at;
     }
 
-    public function setBlockedAt(?\DateTimeImmutable $blocked_at): self
+    public function setBlockedAt(?DateTimeImmutable $blocked_at): self
     {
         $this->blocked_at = $blocked_at;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): self
+    public function setCreatedAt(DateTimeImmutable $created_at): self
     {
         $this->created_at = $created_at;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updated_at;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updated_at): self
+    public function setUpdatedAt(DateTimeImmutable $updated_at): self
     {
         $this->updated_at = $updated_at;
 
@@ -117,13 +120,13 @@ class Comment
     public function prePersist(): void
     {
         $this->id = SecurityService::generateRamdomId();
-        $this->created_at = new \DateTimeImmutable();
-        $this->updated_at = new \DateTimeImmutable();
+        $this->created_at = new DateTimeImmutable();
+        $this->updated_at = new DateTimeImmutable();
     }
 
     #[ORM\PreUpdate]
     public function preUpdate(): void
     {
-        $this->updated_at = new \DateTimeImmutable();
+        $this->updated_at = new DateTimeImmutable();
     }
 }

@@ -33,7 +33,7 @@ class CommentAddHandler
 
         if ($form->isSubmitted() && $form->isValid()) {
             $author = $this->security->getUser();
-            if(!$author instanceof User){
+            if (! $author instanceof User) {
                 return false;
             }
             /** @var Comment $comment */
@@ -41,6 +41,7 @@ class CommentAddHandler
             $comment->setTrick($trick);
             $comment->setAuthor($author);
             $this->commentRepository->add($comment, true);
+
             return true;
         }
 

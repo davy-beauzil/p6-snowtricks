@@ -16,7 +16,11 @@
             position: absolute;
             top: 0;
             left: 0;
-            background-image: url({{ get_public_image(trick.mainImage.path) }});
+            {% if trick.mainImage != null %}
+            background-image: url({{ get_public_image(trick.mainImage.path)}});
+            {% else %}
+            background-color: #ffffff;
+            {% endif %}
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center;
@@ -45,25 +49,48 @@
 
 {% block footer_javascript %}
     {{ parent() }}
-{#    {% include 'tricks/_delete_button_javascript.html.twig' %}#}
+
+    <script>
+		toggleButton = document.querySelector('#toggle_medias')
+		gallery = document.querySelector('#gallery')
+
+		toggleButton.addEventListener('click', (e) => {
+			e.preventDefault();
+			if(gallery.classList.contains('d-none')){
+				gallery.classList.remove('d-none');
+				gallery.classList.add('d-flex');
+				toggleButton.innerHTML = 'Cacher les médias'
+			}else if(gallery.classList.contains('d-flex')){
+				gallery.classList.remove('d-flex');
+				gallery.classList.add('d-none');
+				toggleButton.innerHTML = 'Afficher les médias'
+			}
+		})
+    </script>
 {% endblock %}
 
 {% block content %}
     <div class="container-fluid p-0 mb-5">
         <div class="row">
             <div class="main_image w-100">
+                {% if app.user == trick.author %}
                 <div class="main_image_button">
                     {% include "tricks/_edit_button.html.twig" with {'edit_url': path('tricks_edit', {'slug': trick.slug})} %}
                     {% include "tricks/_delete_button.html.twig" with {'slug': trick.slug} %}
                 </div>
+                {% endif %}
                 <p class="main_image_title display-1 text-white text-capitalize">{{ trick.name }}</p>
             </div>
         </div>
     </div>
     <div class="container mb-3">
         <div class="row gap-5">
-            <div class="gallery rounded shadow-lg p-3 d-flex flex-row gap-4">
+            {% if trick.mainImage != null or trick.images|length > 0 or trick.videos|length > 0 %}
+            <button class="btn btn-sm btn-secondary d-inline-block d-md-none w-auto" id="toggle_medias">Afficher les médias</button>
+            <div class="gallery rounded shadow-lg p-3 d-none d-md-flex flex-row gap-4" id="gallery">
+                {% if trick.mainImage != null %}
                 <img src="{{ get_public_image(trick.mainImage.path) }}" class="gallery_image" alt="{{ trick.name }}">
+                {% endif %}
 
                 {% for image in trick.images %}
                 <img src="{{ get_public_image(image.path) }}" class="gallery_image" alt="{{ trick.name }}">
@@ -80,10 +107,11 @@
                     ></iframe>
                 {% endfor %}
             </div>
+            {% endif %}
 
             <p class="">{{ trick.description }}</p>
 
-            <div class="d-flex justify-content-center gap-3">
+            <div class="d-flex flex-column flex-md-row justify-content-center gap-3">
                 <span class="badge bg-primary">Auteur : {{ trick.author.username }}</span>
                 <span class="badge bg-primary">Groupe : {{ trick.trickGroup.name }}</span>
                 <span class="badge bg-primary">Ecrit le : {{ trick.createdAt|date('d/m/y à H:i') }}</span>
@@ -94,28 +122,35 @@
 
             <div>
                 {% if app.user %}
+                <div data-turbo="false">
                     {{ form_start(commentForm) }}
                     {{ form_widget(commentForm) }}
                     <input type="submit" class="btn btn-primary" value="Ajouter">
                     {{ form_end(commentForm) }}
+                </div>
                 {% endif %}
 
-                {% for comment in trick.comments %}
+                {% for comment in comments %}
                     <hr>
                     <div class="d-flex flex-row justify-content-between w-100">
-                        <p class="fw-bold d-inline mb-0">{{ comment.author.username }}</p>
+                        <p class="mb-0"><span class="fw-bold d-inline">{{ comment.author.username }}</span> le {{ comment.createdAt|date("d/m/Y à H:i") }}</p>
                         {% if app.user == comment.author %}
                         <div>
-                            <button class="btn btn-sm btn-success">Editer</button>
                             <a href="{{ path('comments_delete', {'id': comment.id}) }}" class="btn btn-sm btn-danger">Supprimer</a>
                         </div>
                         {% endif %}
                     </div>
                     {{ comment.comment }}
                 {% endfor %}
+
+                <turbo-frame id="add_comments">
+                    {% if currentPage < countPages %}
+                    <div class="mt-3 d-flex justify-content-center">
+                        <a href="{{ path('tricks_details', {'slug': trick.slug, 'comments_page': currentPage + 1}) }}" class="btn btn-sm btn-secondary">Afficher plus de commentaires</a>
+                    </div>
+                    {% endif %}
+                </turbo-frame>
             </div>
-
-
         </div>
     </div>
 {% endblock %}

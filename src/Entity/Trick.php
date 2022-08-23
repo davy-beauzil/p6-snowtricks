@@ -30,7 +30,7 @@ class Trick
     #[ORM\Column(type: Types::TEXT)]
     private string $slug;
 
-    #[ORM\OneToOne(targetEntity: Image::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: Image::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[ORM\JoinColumn(onDelete: 'SET NULL')]
     private ?Image $mainImage = null;
 
@@ -63,7 +63,13 @@ class Trick
     #[ORM\JoinColumn(nullable: false)]
     private User $author;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection<int, \App\Entity\Comment>|\App\Entity\Comment[]
+     */
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, orphanRemoval: true)]
+    #[ORM\OrderBy([
+        'created_at' => 'DESC',
+    ])]
     private Collection $comments;
 
     public function __construct()
@@ -253,7 +259,7 @@ class Trick
 
     public function addComment(Comment $comment): self
     {
-        if (!$this->comments->contains($comment)) {
+        if (! $this->comments->contains($comment)) {
             $this->comments[] = $comment;
             $comment->setTrick($this);
         }

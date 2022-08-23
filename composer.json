@@ -6,6 +6,7 @@
     "require": {
         "php": ">=8.0",
         "ext-ctype": "*",
+        "ext-http": "*",
         "ext-iconv": "*",
         "doctrine/annotations": "^1.0",
         "doctrine/doctrine-bundle": "^2.6",
@@ -40,6 +41,7 @@
         "symfony/string": "5.4.*",
         "symfony/translation": "5.4.*",
         "symfony/twig-bundle": "5.4.*",
+        "symfony/ux-turbo": "^2.3",
         "symfony/validator": "5.4.*",
         "symfony/web-link": "5.4.*",
         "symfony/webapp-meta": "^1.0",
@@ -47,8 +49,7 @@
         "symfony/yaml": "5.4.*",
         "twig/cssinliner-extra": "^3.4",
         "twig/extra-bundle": "^3.4",
-        "twig/twig": "^2.12|^3.0",
-      "ext-http": "*"
+        "twig/twig": "^2.12|^3.0"
     },
     "config": {
         "allow-plugins": {
@@ -100,6 +101,7 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.4",
+        "fakerphp/faker": "^1.20",
         "phpstan/phpstan": "^1.7",
         "phpstan/phpstan-beberlei-assert": "^1.0",
         "phpstan/phpstan-deprecation-rules": "^1.0",

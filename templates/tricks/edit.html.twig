@@ -70,12 +70,16 @@
     {{ form_start(trickForm) }}
         <div class="row my-3">
             <div class="col-12">
+                {% if trick.mainImage != null or trick.images|length > 0 or trick.videos|length > 0 %}
+                <button class="btn btn-sm btn-secondary d-inline-block d-md-none w-auto mb-3" id="toggle_medias">Afficher les médias</button>
+                {% endif %}
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-header-title">Images et vidéos</h5>
                     </div>
+                    {% if trick.mainImage != null or trick.images|length > 0 or trick.videos|length > 0 %}
                     <div class="card-body">
-                        <div class="gallery rounded d-flex flex-row">
+                        <div class="gallery rounded d-flex flex-row" id="gallery">
                             {% if trick.mainImage is not null %}
                                 <div class="position-relative me-4">
                                     {% include "images/_delete_button.html.twig" with {'id' : trick.mainImage.id, 'absolute': true} %}
@@ -107,6 +111,7 @@
                             {% endfor %}
                         </div>
                     </div>
+                    {% endif %}
                     <div class="card-footer">
                         <div class="row">
                             {% if trickForm.children.mainImage is defined %}
@@ -142,9 +147,9 @@
                 <button type="button" class="btn btn-outline-primary btn-sm mb-3" id="new_video">Nouvelle vidéo</button>
             </div>
             <div>
-                <a href="{{ path('tricks_details', {'slug': trick.slug}) }}" class="btn btn-sm btn-secondary">Annuler</a>
-                <a href="{{ path('tricks_delete', {'slug': trick.slug}) }}" class="btn btn-sm btn-danger">Supprimer</a>
-                <input type="submit" class="btn btn-sm btn-primary" value="Modifier la figure">
+                <a href="{{ path('tricks_details', {'slug': trick.slug}) }}" class="btn btn-sm btn-secondary mb-1">Annuler</a>
+                <a href="{{ path('tricks_delete', {'slug': trick.slug}) }}" class="btn btn-sm btn-danger mb-1">Supprimer</a>
+                <input type="submit" class="btn btn-sm btn-primary mb-1" value="Modifier la figure">
             </div>
         </div>
     {{ form_end(trickForm) }}
@@ -167,5 +172,27 @@
 
 		document.querySelector('#new_video').addEventListener('click', addVideo);
 
+    </script>
+{% endblock %}
+
+{% block footer_javascript %}
+    {{ parent() }}
+
+    <script>
+		toggleButton = document.querySelector('#toggle_medias')
+		gallery = document.querySelector('#gallery')
+
+		toggleButton.addEventListener('click', (e) => {
+			e.preventDefault();
+			if(gallery.classList.contains('d-none')){
+				gallery.classList.remove('d-none');
+				gallery.classList.add('d-flex');
+				toggleButton.innerHTML = 'Cacher les médias'
+			}else if(gallery.classList.contains('d-flex')){
+				gallery.classList.remove('d-flex');
+				gallery.classList.add('d-none');
+				toggleButton.innerHTML = 'Afficher les médias'
+			}
+		})
     </script>
 {% endblock %}
