@@ -6,6 +6,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Comment;
 use App\Entity\Group;
+use App\Entity\Image;
 use App\Entity\Trick;
 use App\Entity\User;
 use App\Entity\Video;
@@ -38,8 +39,9 @@ class AppFixtures extends Fixture
         $tricks = $this->fillTricks($groups, $users);
         $videos = $this->fillVideos($tricks);
         $comments = $this->fillComments($tricks, $users);
+        $images = $this->fillImages($tricks);
 
-        $toPersist = array_merge($users, $groups, $tricks, $videos, $comments);
+        $toPersist = array_merge($users, $groups, $tricks, $videos, $comments, $images);
         foreach ($toPersist as $object) {
             $manager->persist($object);
         }
@@ -205,17 +207,50 @@ class AppFixtures extends Fixture
     {
         $comments = [];
 
-        for ($i = 0; $i < 100; ++$i) {
-            $comment = new Comment();
-            /** @var string $commentText */
-            $commentText = $this->faker->sentences(random_int(1, 3), true);
-            $comment->setComment($commentText)
-                ->setTrick($tricks[array_rand($tricks)])
-                ->setAuthor($users[array_rand($users)])
-            ;
-            $comments[] = $comment;
+        foreach ($tricks as $trick) {
+            $numberOfComments = random_int(10, 20);
+            for ($i = 0; $i < $numberOfComments; ++$i) {
+                $comment = new Comment();
+                /** @var string $commentText */
+                $commentText = $this->faker->sentences(random_int(1, 3), true);
+                $comment->setComment($commentText)
+                    ->setTrick($trick)
+                    ->setAuthor($users[array_rand($users)])
+                ;
+                $comments[] = $comment;
+            }
         }
 
         return $comments;
+    }
+
+    /**
+     * @param Trick[] $tricks
+     *
+     * @return Image[]
+     */
+    private function fillImages(array $tricks): array
+    {
+        $images = [];
+
+        foreach ($tricks as $trick) {
+            $number = random_int(1, 10);
+            $image = new Image();
+            $image->setPath(sprintf('fixtures/%d.jpg', $number));
+            $image->setMainImageTrick($trick);
+            $trick->setMainImage($image);
+            $images[] = $image;
+
+            for ($i = 0; $i < 3; ++$i) {
+                $number = random_int(1, 10);
+                $image = new Image();
+                $image->setPath(sprintf('fixtures/%d.jpg', $number));
+                $image->setTrick($trick);
+                $trick->addImage($image);
+                $images[] = $image;
+            }
+        }
+
+        return $images;
     }
 }
