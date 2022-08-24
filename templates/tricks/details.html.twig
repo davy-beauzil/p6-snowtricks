@@ -132,13 +132,22 @@
 
                 {% for comment in comments %}
                     <hr>
-                    <div class="d-flex flex-row justify-content-between w-100">
-                        <p class="mb-0"><span class="fw-bold d-inline">{{ comment.author.username }}</span> le {{ comment.createdAt|date("d/m/Y à H:i") }}</p>
-                        {% if app.user == comment.author %}
-                        <div>
-                            <a href="{{ path('comments_delete', {'id': comment.id}) }}" class="btn btn-sm btn-danger">Supprimer</a>
+                    <div class="d-flex flex-row">
+                        <div class="me-3">
+                            {% if comment.author.profilePicture is defined and comment.author.profilePicture != null %}
+                                <img src="{{ get_public_image(comment.author.profilePicture) }}" alt="Photo de profil" class="rounded-circle" style="width: 30px; height: 30px; object-fit: cover; ">
+                            {% else %}
+                                <img src="{{ get_no_image() }}" alt="Photo de profil par défaut" class="rounded-circle" style="width: 30px; height: 30px; object-fit: cover; ">
+                            {% endif %}
                         </div>
-                        {% endif %}
+                        <div class="d-flex flex-row justify-content-between w-100">
+                            <p class="mb-0"><span class="fw-bold d-inline">{{ comment.author.username }}</span> le {{ comment.createdAt|date("d/m/Y à H:i") }}</p>
+                            {% if app.user == comment.author %}
+                            <div>
+                                <a href="{{ path('comments_delete', {'id': comment.id}) }}" class="btn btn-sm btn-danger">Supprimer</a>
+                            </div>
+                            {% endif %}
+                        </div>
                     </div>
                     {{ comment.comment }}
                 {% endfor %}

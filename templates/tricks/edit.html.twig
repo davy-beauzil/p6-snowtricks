@@ -156,8 +156,9 @@
     </div>
 {% endblock %}
 
-{% block javascripts %}
+{% block footer_javascript %}
     {{ parent() }}
+
     <script type="module" defer>
 
 		const collectionHolder = document.querySelector('#create_trick_videos');
@@ -173,10 +174,6 @@
 		document.querySelector('#new_video').addEventListener('click', addVideo);
 
     </script>
-{% endblock %}
-
-{% block footer_javascript %}
-    {{ parent() }}
 
     <script>
 		toggleButton = document.querySelector('#toggle_medias')

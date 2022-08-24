@@ -14,7 +14,6 @@ use App\Repository\TrickRepository;
 use App\Services\ScalewayService;
 use App\Services\TransformUrlService;
 use function array_key_exists;
-use Exception;
 use function is_array;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -113,7 +112,7 @@ class CreateOrUpdateTrickHandler
 
         // On vérifie que l'image est présente
         if (! $mainImage instanceof UploadedFile && $trick->getMainImage() === null) {
-            throw new Exception('Vous devez obligatoirement ajouter une image principale.');
+            return;
         }
 
         // Si l'image doit être remplacée, on supprime l'ancienne

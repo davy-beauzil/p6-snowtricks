@@ -123,9 +123,12 @@ class TrickController extends BaseController
             return $this->redirectToRoute('home');
         }
 
-        $comment = new Comment();
-        $commentForm = $this->commentAddHandler->prepare($comment, []);
-        $this->commentAddHandler->handle($commentForm, $request, $trick);
+        $commentForm = $this->commentAddHandler->prepare(new Comment(), []);
+        $commentSubmitted = $this->commentAddHandler->handle($commentForm, $request, $trick);
+
+        if ($commentSubmitted === true) {
+            $commentForm = $this->commentAddHandler->prepare(new Comment(), []);
+        }
 
         $comments = $this->commentRepository->getCommentWithPage($trick, $comments_page);
         $countPages = $this->commentRepository->countPages($trick);

@@ -31,4 +31,18 @@ final class SecurityServiceTest extends TestCase
         static::assertIsString($id);
         static::assertSame(128, mb_strlen($id));
     }
+
+    protected function checkStrengthPasswordTest_dataProvider(): array
+    {
+        return [
+            ['testtest', false],
+            ['12341234', false],
+            ['@-/!@-/!', false],
+            ['test@test@', false],
+            ['test1234', false],
+            ['@-/!1234', false],
+            ['t1@', false],
+            ['test@1234', true],
+        ];
+    }
 }

@@ -18,7 +18,7 @@ class UserChecker implements UserCheckerInterface
         }
         if ($user->getConfirmedAt() === null) {
             throw new CustomUserMessageAccountStatusException(
-                'Vous devez activer votre compte pour pouvoir vous connecter.'
+                'Vous devez activer votre compte depuis l’email qu’on vous a envoyé pour pouvoir vous connecter.'
             );
         }
     }
