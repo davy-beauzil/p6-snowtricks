@@ -23,13 +23,13 @@ else IsNotLogin
         RegisterController -> Twig : redirectToLastPage(['error' => $error])
         Twig --> Visiteur : affichage formulaire d'inscription avec message d'erreur
     else IsValid
-        RegisterController -> Database : vérifier que l'adresse mail n'est pas utilisée
+        RegisterController -> Database : vérifier que le username n'est pas utilisée
         Database --> RegisterController : return
 
-        alt MailIsUsed
+        alt UsernameIsUsed
             RegisterController -> Twig : redirectToLastPage(['error' => $error])
             Twig --> Visiteur : affichage formulaire d'inscription avec message d'erreur
-        else MailIsNotUsed
+        else UsernameIsNotUsed
             RegisterController -> Database : enregistrer le nouveau compte
             Database --> RegisterController : return
             alt AccountIsNotCreated

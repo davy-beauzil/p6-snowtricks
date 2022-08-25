@@ -3,10 +3,10 @@
 !theme mars
 
 Person as "Admin ou auteur" -> TrickController : GET /tricks/{slug}/update
-alt Is not admin or author
+alt Is not author
     TrickController -[#red]> Twig : render('401')
     Twig -[#red]-> Person : Affichage de la page 401 : Unauthorized
-else Is admin or author
+else Is author
     TrickController -> Database : récupération de la figure
     Database --> TrickController : return
     TrickController -[#green]> Twig : render('tricks/create', ['trick' => $trick])
@@ -15,10 +15,10 @@ end
 
 
 Person -> TrickController : PUT /tricks/{slug}/update
-alt Is not admin or author
+alt Is not author
 TrickController -[#red]> Twig : render('401')
 Twig -[#red]-> Person : Affichage de la page 401 : Unauthorized
-else Is admin or author
+else Is author
     TrickController -> Validator : validation des données
     Validator --> TrickController : return
 

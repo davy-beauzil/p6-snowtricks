@@ -19,6 +19,7 @@ class tricks {
 class images {
     id: string
     name: string
+    main_image_trick_id: string
     trick_id: string
     created_at: datetime
     updated_at: datetime
@@ -27,7 +28,6 @@ class images {
 class videos {
     id: string
     url: string
-    source: string
     trick_id: string
     created_at: datetime
     updated_at: datetime

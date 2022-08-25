@@ -16,7 +16,6 @@ package figures {
 package commentaires {
     (Consulter les commentaires) <--- Utilisateur
     (Commenter une  figure) <--- Utilisateur
-    (Modifier un de ses commentaires) <--- Utilisateur
     (Supprimer un de ses commentaires) <--- Utilisateur
 }
 
