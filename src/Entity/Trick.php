@@ -30,7 +30,7 @@ class Trick
     #[ORM\Column(type: Types::TEXT)]
     private string $slug;
 
-    #[ORM\OneToOne(targetEntity: Image::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToOne(mappedBy: 'mainImageTrick', targetEntity: Image::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[ORM\JoinColumn(onDelete: 'SET NULL')]
     private ?Image $mainImage = null;
 
@@ -60,7 +60,7 @@ class Trick
     private ?DateTimeImmutable $blockedAt;
 
     #[ORM\ManyToOne(targetEntity: User::class, fetch: 'EAGER', inversedBy: 'tricks')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private User $author;
 
     /**

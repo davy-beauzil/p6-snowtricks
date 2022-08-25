@@ -28,7 +28,7 @@ class Image
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $updatedAt;
 
-    #[ORM\OneToOne(targetEntity: Trick::class, cascade: ['persist'])]
+    #[ORM\OneToOne(mappedBy: 'mainImage', targetEntity: Trick::class, cascade: ['persist'])]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private ?Trick $mainImageTrick = null;
 
