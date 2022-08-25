@@ -1,11 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Unit;
 
 use App\Services\TransformUrlService;
+use Iterator;
 use PHPUnit\Framework\TestCase;
 
-class TransformUrlServiceTest extends TestCase
+/**
+ * @internal
+ */
+final class TransformUrlServiceTest extends TestCase
 {
     private TransformUrlService $transformUrlService;
 
@@ -23,33 +29,19 @@ class TransformUrlServiceTest extends TestCase
         static::assertSame($result, $this->transformUrlService->getEmbedUrl($url));
     }
 
-    private function dataProvider_testGetEmbedUrl(): array
+    protected function dataProvider_testGetEmbedUrl(): Iterator
     {
-        return [
-            [
-                'https://www.youtube.com/watch?v=MVOmvXJtg1Q',
-                'https://www.youtube.com/embed/MVOmvXJtg1Q'
-            ],
-            [
-                'https://www.youtube.com/watch?v=4vK-y4GXb-c',
-                'https://www.youtube.com/embed/4vK-y4GXb-c'
-            ],
-            [
-                'https://www.dailymotion.com/video/x8cmwj1?playlist=x5nmbq',
-                'https://www.dailymotion.com/embed/video/x8cmwj1'
-            ],
-            [
-                'https://www.dailymotion.com/video/x8cmw77?playlist=x5nmbq',
-                'https://www.dailymotion.com/embed/video/x8cmw77'
-            ],
-            [
-                'https://vimeo.com/33316741',
-                null
-            ],
-            [
-                '',
-                null
-            ],
+        yield ['https://www.youtube.com/watch?v=MVOmvXJtg1Q', 'https://www.youtube.com/embed/MVOmvXJtg1Q'];
+        yield ['https://www.youtube.com/watch?v=4vK-y4GXb-c', 'https://www.youtube.com/embed/4vK-y4GXb-c'];
+        yield [
+            'https://www.dailymotion.com/video/x8cmwj1?playlist=x5nmbq',
+            'https://www.dailymotion.com/embed/video/x8cmwj1',
         ];
+        yield [
+            'https://www.dailymotion.com/video/x8cmw77?playlist=x5nmbq',
+            'https://www.dailymotion.com/embed/video/x8cmw77',
+        ];
+        yield ['https://vimeo.com/33316741', null];
+        yield ['', null];
     }
 }

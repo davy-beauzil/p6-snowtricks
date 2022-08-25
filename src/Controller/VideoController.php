@@ -6,13 +6,10 @@ namespace App\Controller;
 
 use App\Entity\Video;
 use App\Repository\VideoRepository;
-use Exception;
 use http\Exception\BadUrlException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Throwable;
 
 #[Route('/videos')]
 class VideoController extends BaseController
@@ -35,7 +32,7 @@ class VideoController extends BaseController
             $this->allowAccessOnlyUser($video->getTrick()->getAuthor());
             $this->videoRepository->remove($video, true);
             $this->addFlash('success', 'La vidéo a bien été supprimée');
-        } catch (BadUrlException $e){
+        } catch (BadUrlException $e) {
             $this->addFlash('danger', $e->getMessage());
         }
 

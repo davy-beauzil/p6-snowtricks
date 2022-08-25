@@ -71,9 +71,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Trick::class, orphanRemoval: true)]
     private Collection $tricks;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection<int, \App\Entity\Comment>|\App\Entity\Comment[]
+     */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Comment::class, orphanRemoval: true)]
+    private Collection $comments;
+
     public function __construct()
     {
         $this->tricks = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -340,6 +347,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if (! $this->tricks->contains($trick)) {
             $this->tricks[] = $trick;
             $trick->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (! $this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setAuthor($this);
         }
 
         return $this;

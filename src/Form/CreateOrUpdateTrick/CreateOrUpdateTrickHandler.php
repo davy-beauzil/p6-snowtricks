@@ -14,7 +14,6 @@ use App\Repository\TrickRepository;
 use App\Services\ScalewayService;
 use App\Services\TransformUrlService;
 use function array_key_exists;
-use Exception;
 use function is_array;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -42,7 +41,7 @@ class CreateOrUpdateTrickHandler
         return $this->formFactory->createNamed('create_trick', CreateOrUpdateTrickForm::class, $trick, $options);
     }
 
-    public function handleCreate(FormInterface $form, Request $request): ?Trick
+    public function handleCreate(FormInterface $form, Request $request): Trick|bool|null
     {
         $form->handleRequest($request);
 
@@ -62,12 +61,11 @@ class CreateOrUpdateTrickHandler
             } catch (CreateTrickException $e) {
                 $form->addError(new FormError($e->getMessage()));
 
-                return null;
-            } catch (Throwable $e) {
-                dd($e->getMessage());
+                return false;
+            } catch (Throwable) {
                 $form->addError(new FormError('Une erreur est survenue lors de l’enregistrement de la figure'));
 
-                return null;
+                return false;
             }
         }
 
@@ -114,7 +112,7 @@ class CreateOrUpdateTrickHandler
 
         // On vérifie que l'image est présente
         if (! $mainImage instanceof UploadedFile && $trick->getMainImage() === null) {
-            throw new Exception('Vous devez obligatoirement ajouter une image principale.');
+            return;
         }
 
         // Si l'image doit être remplacée, on supprime l'ancienne

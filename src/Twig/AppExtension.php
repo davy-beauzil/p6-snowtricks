@@ -48,9 +48,4 @@ class AppExtension extends AbstractExtension
     {
         return TransformUrlService::getEmbedUrl($url);
     }
-
-    public function getScalewayService(): ScalewayService
-    {
-        return $this->scalewayService;
-    }
 }

@@ -30,7 +30,7 @@ class Trick
     #[ORM\Column(type: Types::TEXT)]
     private string $slug;
 
-    #[ORM\OneToOne(targetEntity: Image::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: Image::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[ORM\JoinColumn(onDelete: 'SET NULL')]
     private ?Image $mainImage = null;
 
@@ -63,10 +63,20 @@ class Trick
     #[ORM\JoinColumn(nullable: false)]
     private User $author;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection<int, \App\Entity\Comment>|\App\Entity\Comment[]
+     */
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, orphanRemoval: true)]
+    #[ORM\OrderBy([
+        'created_at' => 'DESC',
+    ])]
+    private Collection $comments;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
         $this->videos = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function setId(string $id): self
@@ -235,6 +245,36 @@ class Trick
     public function setAuthor(User $author): self
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (! $this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getTrick() === $this) {
+                $comment->setTrick(null);
+            }
+        }
 
         return $this;
     }

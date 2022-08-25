@@ -1,11 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Unit;
 
 use App\Services\SecurityService;
+use function mb_strlen;
 use PHPUnit\Framework\TestCase;
 
-class SecurityServiceTest extends TestCase
+/**
+ * @internal
+ */
+final class SecurityServiceTest extends TestCase
 {
     /**
      * @test
@@ -13,7 +19,7 @@ class SecurityServiceTest extends TestCase
      */
     public function checkStrengthPasswordTest(string $password, bool $result): void
     {
-        self::assertSame(SecurityService::checkStrengthPassword($password), $result);
+        static::assertSame(SecurityService::checkStrengthPassword($password), $result);
     }
 
     /**
@@ -22,46 +28,21 @@ class SecurityServiceTest extends TestCase
     public function generateRamdomIdTest(): void
     {
         $id = SecurityService::generateRamdomId();
-        self::assertIsString($id);
-        self::assertSame(128, strlen($id));
+        static::assertIsString($id);
+        static::assertSame(128, mb_strlen($id));
     }
 
-    private function checkStrengthPasswordTest_dataProvider(): array
+    protected function checkStrengthPasswordTest_dataProvider(): array
     {
         return [
-            [
-              'testtest',
-              false
-            ],
-            [
-                '12341234',
-                false
-            ],
-            [
-                '@-/!@-/!',
-                false
-            ],
-            [
-                'test@test@',
-                false
-            ],
-            [
-                'test1234',
-                false
-            ],
-            [
-                '@-/!1234',
-                false
-            ],
-            [
-                't1@',
-                false
-            ],
-            [
-                'test@1234',
-                true
-            ],
+            ['testtest', false],
+            ['12341234', false],
+            ['@-/!@-/!', false],
+            ['test@test@', false],
+            ['test1234', false],
+            ['@-/!1234', false],
+            ['t1@', false],
+            ['test@1234', true],
         ];
     }
-
 }

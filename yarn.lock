@@ -903,6 +903,11 @@
   resolved "https://registry.npmjs.org/@hotwired/stimulus/-/stimulus-3.0.1.tgz"
   integrity sha512-oHsJhgY2cip+K2ED7vKUNd2P+BEswVhrCYcJ802DSsblJFv7mPFVk3cQKvm2vHgHeDVdnj7oOKrBbzp1u8D+KA==
 
+"@hotwired/turbo@^7.0.1":
+  version "7.1.0"
+  resolved "https://registry.npmjs.org/@hotwired/turbo/-/turbo-7.1.0.tgz"
+  integrity sha512-Q8kGjqwPqER+CtpQudbH+3Zgs2X4zb6pBAlr6NsKTXadg45pAOvxI9i4QpuHbwSzR2+x87HUm+rot9F/Pe8rxA==
+
 "@jridgewell/gen-mapping@^0.1.0":
   version "0.1.1"
   resolved "https://registry.npmjs.org/@jridgewell/gen-mapping/-/gen-mapping-0.1.1.tgz"
@@ -963,6 +968,9 @@
     acorn "^8.0.5"
     loader-utils "^2.0.0"
     schema-utils "^3.0.0"
+
+"@symfony/ux-turbo@file:vendor/symfony/ux-turbo/Resources/assets":
+  version "0.1.0"
 
 "@symfony/webpack-encore@^1.7.0":
   version "1.8.2"
@@ -1680,7 +1688,7 @@ chalk@^4.0.0:
     ansi-styles "^4.1.0"
     supports-color "^7.1.0"
 
-"chokidar@>=3.0.0 <4.0.0", chokidar@^3.5.3:
+chokidar@^3.5.3:
   version "3.5.3"
   resolved "https://registry.npmjs.org/chokidar/-/chokidar-3.5.3.tgz"
   integrity sha512-Dr3sfKRP6oTcjf2JmUmFJfeVMvXBdegxB0iVQ5eb2V10uFJUCAS8OByZdVAyVb8xXNz3GjjTgj9kLWsZTqE6kw==
@@ -2658,11 +2666,6 @@ icss-utils@^5.0.0, icss-utils@^5.1.0:
   resolved "https://registry.npmjs.org/icss-utils/-/icss-utils-5.1.0.tgz"
   integrity sha512-soFhflCVWLfRNOPU3iv5Z9VUdT44xFRbzjLsEzSr5AQmgqPMTHdU3PMT1Cf1ssx8fLNJDA1juftYl+PUcv3MqA==
 
-immutable@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.npmjs.org/immutable/-/immutable-4.0.0.tgz"
-  integrity sha512-zIE9hX70qew5qTUjSS7wi1iwj/l7+m54KWU247nhM3v806UdGj1yDndXj+IOYxxtW9zyLI+xqFNZjTuDaLUqFw==
-
 import-local@^3.0.2:
   version "3.1.0"
   resolved "https://registry.npmjs.org/import-local/-/import-local-3.1.0.tgz"
@@ -2872,11 +2875,6 @@ kind-of@^6.0.2:
   version "6.0.3"
   resolved "https://registry.npmjs.org/kind-of/-/kind-of-6.0.3.tgz"
   integrity sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==
-
-klona@^2.0.4:
-  version "2.0.5"
-  resolved "https://registry.npmjs.org/klona/-/klona-2.0.5.tgz"
-  integrity sha512-pJiBpiXMbt7dkzXe8Ghj/u4FfXOOa98fPW+bihOJ4SjnoijweJrNThJfd3ifXpXhREjpoF2mZVH1GfS9LV3kHQ==
 
 lilconfig@^2.0.3:
   version "2.0.5"
@@ -3848,23 +3846,6 @@ safe-buffer@5.2.1, safe-buffer@>=5.1.0, safe-buffer@^5.1.0, safe-buffer@~5.2.0:
   resolved "https://registry.npmjs.org/safer-buffer/-/safer-buffer-2.1.2.tgz"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-sass-loader@^13.0.0:
-  version "13.0.0"
-  resolved "https://registry.npmjs.org/sass-loader/-/sass-loader-13.0.0.tgz"
-  integrity sha512-IHCFecI+rbPvXE2zO/mqdVFe8MU7ElGrwga9hh2H65Ru4iaBJAMRteum1c4Gsxi9Cq1FOtTEDd6+/AEYuQDM4Q==
-  dependencies:
-    klona "^2.0.4"
-    neo-async "^2.6.2"
-
-sass@^1.52.1:
-  version "1.52.1"
-  resolved "https://registry.npmjs.org/sass/-/sass-1.52.1.tgz"
-  integrity sha512-fSzYTbr7z8oQnVJ3Acp9hV80dM1fkMN7mSD/25mpcct9F7FPBMOI8krEYALgU1aZoqGhQNhTPsuSmxjnIvAm4Q==
-  dependencies:
-    chokidar ">=3.0.0 <4.0.0"
-    immutable "^4.0.0"
-    source-map-js ">=0.6.2 <2.0.0"
-
 schema-utils@^2.6.5:
   version "2.7.1"
   resolved "https://registry.npmjs.org/schema-utils/-/schema-utils-2.7.1.tgz"
@@ -4040,7 +4021,7 @@ source-list-map@^2.0.0:
   resolved "https://registry.npmjs.org/source-list-map/-/source-list-map-2.0.1.tgz"
   integrity sha512-qnQ7gVMxGNxsiL4lEuJwe/To8UnK7fAnmbGEEH8RpLouuKbeEm0lhbQVFIrNSuB+G7tVrAlVsZgETT5nljf+Iw==
 
-"source-map-js@>=0.6.2 <2.0.0", source-map-js@^1.0.2:
+source-map-js@^1.0.2:
   version "1.0.2"
   resolved "https://registry.npmjs.org/source-map-js/-/source-map-js-1.0.2.tgz"
   integrity sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==

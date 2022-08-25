@@ -75,12 +75,10 @@ class CreateOrUpdateTrickForm extends AbstractType
             ])
         ;
 
-//        dd($trick->getMainImage());
-
         if ($trick->getMainImage() === null) {
             $builder->add('mainImage', FileType::class, [
                 'label' => 'Image principale',
-                'required' => true,
+                'required' => false,
                 'mapped' => false,
                 'constraints' => [
                     new File([

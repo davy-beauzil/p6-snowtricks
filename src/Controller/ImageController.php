@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Image;
+use App\Entity\User;
 use App\Repository\ImageRepository;
 use App\Services\ScalewayService;
 use Exception;
@@ -32,12 +33,13 @@ class ImageController extends BaseController
             if (! $image instanceof Image) {
                 throw new Exception();
             }
-            $this->allowAccessOnlyUser($image->getMainImageTrick() !== null ? $image->getMainImageTrick()->getAuthor() : $image->getTrick()->getAuthor());
+            /** @var User $author */
+            $author = $image->getMainImageTrick()?->getAuthor() ?? $image->getTrick()?->getAuthor();
+            $this->allowAccessOnlyUser($author);
             $this->imageRepository->remove($image, true);
             $this->scalewayService->removeFile($image->getPath());
             $this->addFlash('success', 'L’image a bien été supprimée');
-        } catch (Throwable $e) {
-            dd($e);
+        } catch (Throwable) {
             $this->addFlash('danger', 'Une erreur est survenue lors de la suppression de l’image');
         }
 
