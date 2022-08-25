@@ -22,15 +22,15 @@ SCALEWAY_KEY=
 SCALEWAY_SECRET=
 ```
 
+<br/>Install Composer dependances
+```bash
+composer install
+```
+
 <br/>Install Yarn dependances and build
 ```bash
 yarn install
 yarn build
-```
-
-<br/>Install Composer dependances
-```bash
-composer install
 ```
 
 <br/>Make database
