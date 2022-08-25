@@ -1,5 +1,7 @@
 # Projet 6 - Développez de A à Z le site communautaire SnowTricks
 
+<a href="https://codeclimate.com/github/davy-beauzil/p6-snowtricks/maintainability"><img src="https://api.codeclimate.com/v1/badges/f5c57d86386b00011b74/maintainability" /></a>
+
 Ce projet a été réalisé dans le cadre de ma formation de développeur PHP/Symfony chez Openclassrooms.
 
 ## Installation
