@@ -1,7 +1,8 @@
-{% apply inline_css(source('@styles/app.css')) %}
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
 <div>
     <h3 class="display-3">Bonjour et bienvenu sur Snowtricks</h3>
     <p class="mb-3">Votre compte a été créé avec succès. Pour y accéder, cliquez sur le bouton juste en dessous.</p>
     <a href="{{ app_url }}{{ path('user_confirm', {'user_id': user.getId, 'confirmation_token': confirmation_token}) }}" class="btn btn-primary">Activez votre compte</a>
 </div>
-{% endapply %}

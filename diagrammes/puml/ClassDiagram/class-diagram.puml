@@ -67,11 +67,11 @@ class users {
 }
 
 tricks "1" -- "*" images
-tricks "1" -- "1" images
+tricks "1" -- "0..1" images
 tricks "1" -- "*" videos
 groups "1" -- "*" tricks
 users "1" -- "*" comments
 comments "*" -- "1" tricks
-users "0..1" -- "*" tricks
+users "1" -- "*" tricks
 
 @enduml

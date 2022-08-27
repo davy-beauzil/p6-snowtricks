@@ -67,11 +67,11 @@ class users {
 }
 
 tricks "1" -- "*" images : possède
-tricks "1" -- "1" images : possède
+tricks "1" -- "0..1" images : possède
 tricks "1" -- "*" videos : possède
 groups "1" -- "*" tricks : appartient
 users "1" -- "*" comments : a commenté
 comments "*" -- "1" tricks : est commenté
-users "0..1" -- "*" tricks : est l'auteur de
+users "1" -- "*" tricks : est l'auteur de
 
 @enduml
